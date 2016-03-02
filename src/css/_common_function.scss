@@ -1,0 +1,170 @@
+// rem大小计算基准值
+$baseFontSize: 20px !default;
+$baseFontRatio: 2 !default;
+
+// root字体大小设为10px
+html {
+  font-size: $baseFontSize;
+}
+
+// 针对不同的设备，对页面rem做不同缩放
+html {
+  font-size: $baseFontSize*.5;
+  @media screen and (min-width: 320px) {
+    font-size: $baseFontSize*.85;
+  }
+  @media screen and (min-width: 360px) {
+    font-size: $baseFontSize*.95;
+  }
+  @media screen and (min-width: 375px) {
+    font-size: $baseFontSize;
+  }
+  @media screen and (min-width: 414px) {
+    font-size: $baseFontSize*1.1;
+  }
+  overflow-x: hidden;
+}
+
+// body中重置为14px，确保没写font-size的元素，字体大小较为正常
+body {
+  font-size: $baseFontSize*0.7;
+}
+
+// 去除数值后的单位
+@function stripUnits($number) {
+  @return $number / ($number * 0 + 1);
+}
+
+// px换算成rem值，可多参数、带单位
+@function px2rem($sizes) {
+  $result: '';
+
+  @each $size in $sizes {
+    $rem: $size;
+    @if $result != '' {
+      $result: $result + ' ';
+    }
+
+    @if type_of($size) == number {
+      $rem: (stripUnits($size / $baseFontSize / $baseFontRatio)) + rem;
+    }
+
+    $result: $result + $rem;
+  }
+
+  //$result : $result + ' ' + '/*#{$sizes}*/';
+  @return unquote($result);
+}
+
+@mixin txt-height($height) {
+  height: $height;
+  line-height: $height;
+}
+
+@mixin background($url, $width, $height,$important:null) {
+  width: px2rem($width);
+  height: px2rem($height);
+  @if ($important==null) {
+    background-image: url($url);
+  } @else if ($important=='!important') {
+    background-image: url($url) !important;
+  }
+
+  background-size: px2rem($width $height);
+  background-repeat: no-repeat;
+}
+
+@mixin no-text {
+  text-indent: px2rem(-100000px);
+  font-size: 0;
+}
+
+@mixin img-btn($noText: null) {
+  outline: none;
+  border: 0 none;
+  @if ($noText) {
+    @include no-text;
+  }
+}
+
+@mixin txt-ellipsis {
+  padding-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+//在retina的屏幕上实现真实的1px边框
+@mixin border1px($dir, $color, $noRelative:null) {
+  @if ($dir == all) {
+    border: 1px solid $color;
+  } @else {
+    @if ($noRelative == null) {
+      position: relative;
+    }
+    $insertPos: before;
+    @if ($dir == bottom or $dir == right) {
+      $insertPos: after;
+    }
+    &::#{$insertPos} {
+      content: "";
+      display: block;
+      position: absolute;
+      $pro1: width;
+      $pro2: height;
+      $pro3: top;
+      $pro4: left;
+      @if ($dir == top or $dir == bottom) {
+        -webkit-transform-origin: center $dir;
+        transform-origin: center $dir;
+        $pro1: width;
+        $pro2: height;
+        @if ($dir == top) {
+          $pro3: top;
+        } @else {
+          $pro3: bottom;
+        }
+        $pro4: left;
+      } @else if ($dir == left or $dir == right) {
+        -webkit-transform-origin: $dir center;
+        transform-origin: $dir center;
+
+        $pro1: height;
+        $pro2: width;
+        @if ($dir == left) {
+          $pro3: left;
+        } @else {
+          $pro3: right;
+        }
+        $pro4: top;
+      }
+      #{$pro1}: 100%;
+      #{$pro3}: 0;
+
+      #{$pro1}: 200%;
+      #{$pro4}: -50%;
+      -webkit-transform: scale((1 / 2));
+      transform: scale((1 / 2));
+
+      //@media screen and (-webkit-device-pixel-ratio: 2) {
+      //  #{$pro1}: 200%;
+      //  #{$pro4}: -50%;
+      //  -webkit-transform: scale((1 / 2));
+      //  transform: scale((1 / 2));
+      //}
+      //@media screen and (-webkit-device-pixel-ratio: 3) {
+      //  #{$pro1}: 300%;
+      //  #{$pro4}: -100%;
+      //  -webkit-transform: scale((1 / 3));
+      //  transform: scale((1 / 3));
+      //}
+      border-#{$dir}: 1px solid $color;
+    }
+  }
+  //旧：
+  //@if ($dir==all) {
+  //  border: 1px solid $color;
+  //} @else {
+  //  border-#{$dir}: 1px solid $color;
+  //}
+}
