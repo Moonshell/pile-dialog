@@ -1,8 +1,8 @@
 /**
  * Pile Dialog
  *
- * Ver 0.10.0
- * Date 2016/3/2
+ * Ver 0.10.1
+ * Date 2016/3/3
  *
  * Created by krimeshu on 2016/1/13.
  */
@@ -254,13 +254,12 @@
         'open': function (e) {
             var self = this;
 
-            if (self.isBusy ||
-                (self.trigger('open', e) === false)) {
+            if (self.trigger('open', e) === false) {
                 return;
             }
-            self.isBusy = true;
-            window.setTimeout(function () {
-                self.isBusy = false;
+            self._waitingTimeout && window.clearTimeout(self._waitingTimeout);
+            self._waitingTimeout = window.setTimeout(function () {
+                self._waitingTimeout = null;
             }, TRANSITION_TIME);
 
             var z = Dialog.maxZIndex += 10;
@@ -277,16 +276,15 @@
         'close': function (e) {
             var self = this;
 
-            if (self.isBusy ||
-                (self.trigger('close', e) === false)) {
+            if (self.trigger('close', e) === false) {
                 return;
             }
-            self.isBusy = true;
-            window.setTimeout(function () {
+            self._waitingTimeout && window.clearTimeout(self._waitingTimeout);
+            self._waitingTimeout = window.setTimeout(function () {
                 self.doms.wrap.classList.remove('open');
                 self.doms.wrap.offsetWidth = self.doms.wrap.offsetWidth | 0;
 
-                self.isBusy = false;
+                self._waitingTimeout = null;
             }, TRANSITION_TIME);
 
             self.doms.cover.classList.remove('show');
@@ -420,8 +418,8 @@
             var dialog = Dialog.toastDialog;
             dialog.find(0).setText(msg);
             dialog.open();
-            if (dialog.timeout) {
-                window.clearTimeout(dialog.timeout);
+            if (dialog._closeTimeout) {
+                window.clearTimeout(dialog._closeTimeout);
             }
             if (arguments.length === 2 && typeof time === 'function') {
                 callback = time;
@@ -429,9 +427,9 @@
             }
             time = time === undefined ? 2500 : time;
             if (time) {
-                dialog.timeout = window.setTimeout(function () {
+                dialog._closeTimeout = window.setTimeout(function () {
                     dialog.close();
-                    dialog.timeout = null;
+                    dialog._closeTimeout = null;
                     callback && callback();
                 }, time);
             }
