@@ -25,7 +25,7 @@
 
     /****************************************/
 
-    var Dialog = function (opt) {
+    var PileDialog = function (opt) {
         var self = this;
 
         var prop = opt.prop || {
@@ -80,9 +80,9 @@
         onClose && self.on('close', onClose);
     };
 
-    Dialog.maxZIndex = 1000000;
+    PileDialog.maxZIndex = 1000000;
 
-    Dialog.prototype = {
+    PileDialog.prototype = {
         dialogType: TYPE.DIALOG,
         'setTitle': function (title) {
             this.title = title;
@@ -131,20 +131,20 @@
                 child = thing;
             } else if (type === '[object String]') {
                 // 追加 字符串（自动转为 Dialog.Para 对象）
-                child = new Dialog.Para({
+                child = new PileDialog.Para({
                     text: thing
                 });
             } else if (type === '[object Object]' &&
                 typeof thing.text === 'string' &&
                 typeof thing.click === 'function') {
                 // 追加 按键（自动转为 Dialog.Button 对象）
-                child = new Dialog.Button({
+                child = new PileDialog.Button({
                     text: thing.text,
                     click: thing.click
                 });
             } else if (/\[object HTML.*?Element]/i.test(type)) {
                 // 追加 DOM（自动转为 Dialog.Child 对象）
-                child = new Dialog.Child({
+                child = new PileDialog.Child({
                     dom: thing
                 });
             }
@@ -263,7 +263,7 @@
                 self.isBusy = false;
             }, TRANSITION_TIME);
 
-            var z = Dialog.maxZIndex += 10;
+            var z = PileDialog.maxZIndex += 10;
             self.doms.wrap.style.zIndex = z;
             self.doms.cover.style.zIndex = z + 1;
             self.doms.box.style.zIndex = z + 2;
@@ -315,9 +315,9 @@
 
     /****************************************/
 
-    Dialog.TYPE = TYPE;
+    PileDialog.TYPE = TYPE;
 
-    Dialog.CHILD_PROTO = {
+    PileDialog.CHILD_PROTO = {
         'dialogType': TYPE.CHILD,
         'setText': function (text) {
             var self = this;
@@ -345,17 +345,17 @@
 
     /****************************************/
 
-    Dialog.Child = function (opt) {
+    PileDialog.Child = function (opt) {
         var self = this;
 
         self.dom = opt.dom;
     };
 
-    Dialog.Child.prototype = Dialog.CHILD_PROTO;
+    PileDialog.Child.prototype = PileDialog.CHILD_PROTO;
 
     /****************************************/
 
-    Dialog.Para = function (opt) {
+    PileDialog.Para = function (opt) {
         var self = this;
 
         var text = opt.text || '',
@@ -372,11 +372,11 @@
         self.dialogType = TYPE.PARA;
     };
 
-    Dialog.Para.prototype = Dialog.CHILD_PROTO;
+    PileDialog.Para.prototype = PileDialog.CHILD_PROTO;
 
     /****************************************/
 
-    Dialog.Button = function (opt) {
+    PileDialog.Button = function (opt) {
         var self = this;
 
         var text = opt.text || '',
@@ -399,12 +399,12 @@
         self.dialogType = TYPE.PARA;
     };
 
-    Dialog.Button.prototype = Dialog.CHILD_PROTO;
+    PileDialog.Button.prototype = PileDialog.CHILD_PROTO;
 
     /****************************************/
 
-    Dialog.createDefaultDialogs = function () {
-        Dialog.toastDialog = new Dialog({
+    PileDialog.createDefaultDialogs = function () {
+        PileDialog.toastDialog = new PileDialog({
             prop: {
                 skin: 'toast',
                 cover: false,
@@ -415,9 +415,9 @@
                 ''
             ]
         });
-        Dialog.toastDialog.hideTitle();
-        Dialog.toast = function (msg, time, callback) {
-            var dialog = Dialog.toastDialog;
+        PileDialog.toastDialog.hideTitle();
+        PileDialog.toast = function (msg, time, callback) {
+            var dialog = PileDialog.toastDialog;
             dialog.find(0).setText(msg);
             dialog.open();
             if (dialog.timeout) {
@@ -439,12 +439,12 @@
     };
 
     if (document.addEventListener) {
-        document.addEventListener('DOMContentLoaded', Dialog.createDefaultDialogs);
+        document.addEventListener('DOMContentLoaded', PileDialog.createDefaultDialogs);
     } else if (window.addEventListener) {
-        window.addEventListener('load', Dialog.createDefaultDialogs);
+        window.addEventListener('load', PileDialog.createDefaultDialogs);
     } else if (window.attachEvent) {
-        window.attachEvent('onload', Dialog.createDefaultDialogs);
+        window.attachEvent('onload', PileDialog.createDefaultDialogs);
     }
 
-    window.Dialog = Dialog;
+    window.PileDialog = PileDialog;
 })();
