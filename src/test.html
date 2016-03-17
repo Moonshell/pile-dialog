@@ -8,7 +8,25 @@
 <h1>Let's test it here.</h1>
 <script src="pile-dialog.js"></script>
 <script>
-    PileDialog.toast('Hello world!');
+    var dialog = new PileDialog({
+        prop: {
+            skin: 'default',
+            cover: false,
+            closeBtn: false,
+            lock: false
+        },
+        content: [
+            'Hello world!'
+        ]
+    });
+
+    dialog.setTitle('I am title');
+
+    dialog.open();
+
+    window.setTimeout(function () {
+        dialog.close();
+    }, 3000);
 </script>
 </body>
 </html>
