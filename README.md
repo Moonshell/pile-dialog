@@ -22,14 +22,17 @@ var dialog = new PileDialog({
 
 ### options
 Type: `Object`
+
 实例化对话框的参数。
 
 #### options.prop
 Type: `Object`
+
 对话框的基本属性。
 
 #### options.content
 Type: `Object`
+
 对话框的内容。
 
 ## setTitle(title)
@@ -41,6 +44,7 @@ dialog.setTitle('I am title');
 
 ### title
 Type: `String`
+
 标题文本
 
 ## hideTitle() / showTitle()
@@ -51,6 +55,7 @@ Type: `String`
 
 ### e
 Type: `Object`
+
 事件对象，可缺省。
 
 
