@@ -88,6 +88,15 @@ Type: `PileDialog.Para` or `PileDialog.Btn` or `String`（将自动转换成`Pil
 
 清空对话框中的所有内容。
 
+## PileDialog.setProp(prop)
+
+设置对话框的属性。
+
+### prop
+Type: `Object`
+
+属性对象，同构造函数参数中的`options.prop`。
+
 ## PileDialog.setContent(content)
 
 设置对话框中的内容（覆盖原有内容）。
@@ -95,4 +104,22 @@ Type: `PileDialog.Para` or `PileDialog.Btn` or `String`（将自动转换成`Pil
 ### content
 Type: `Array`
 
-内容成员数组。
+内容成员数组，同构造函数参数中的`options.content`。
+
+## PileDialog.on(type, callback)
+
+为对话框增加事件监听器。
+
+### type
+Type: `String`
+
+事件类型，目前提供`open`、`close`两个事件。
+
+### callback
+Type: `Function`
+
+事件监听的回调函数，在函数中`return false`能阻止事件继续向后面的监听器传播，以及阻止事件的默认行为（如阻止对话框打开/关闭）。
+
+## PileDialog.trigger(type)
+
+触发对话框的某种事件。

@@ -80,7 +80,7 @@
         onClose && self.on('close', onClose);
     };
 
-    PileDialog.maxZIndex = 1000000;
+    PileDialog.topZIndex = 1000000;
 
     PileDialog.prototype = {
         dialogType: TYPE.DIALOG,
@@ -262,7 +262,7 @@
                 self._waitingTimeout = null;
             }, TRANSITION_TIME);
 
-            var z = PileDialog.maxZIndex += 10;
+            var z = PileDialog.topZIndex += 10;
             self.doms.wrap.style.zIndex = z;
             self.doms.cover.style.zIndex = z + 1;
             self.doms.box.style.zIndex = z + 2;
