@@ -29,11 +29,12 @@ Type: `Object`
 Type: `Object`
 
 对话框的基本属性。
+主要包括`skin`、`cover`、`closeBtn`和`lock`四个字段，分别是`对话框皮肤`、`是否显示遮罩`、`是否显示关闭按键`和`是否锁定（点击遮罩不关闭）`。
 
 #### options.content
 Type: `Object`
 
-对话框的内容。
+对话框的内容。是一个一维数组，数组成员可以是`PileDialog.Para`、`PileDialog.Btn`、`String`（将自动转换成`PileDialog.Para`）、`Object`（将尝试转换成`PileDialog.Btn`）。
 
 ## PileDialog.setTitle(title)
 设置对话框的标题。
@@ -45,7 +46,7 @@ dialog.setTitle('I am title');
 ### title
 Type: `String`
 
-标题文本
+标题文本。
 
 ## PileDialog.hideTitle() / PileDialog.showTitle()
 隐藏/显示对话框的标题
