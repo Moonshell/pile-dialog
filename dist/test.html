@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Page</title>
+</head>
+<body>
+<h1>Let's test it here.</h1>
+<script src="pile-dialog.js"></script>
+<script>
+    var dialog = new PileDialog({
+        prop: {
+            skin: 'default',
+            cover: true,
+            closeBtn: true,
+            lock: false
+        },
+        content: [
+            'Hello world!'
+        ]
+    });
+
+    dialog.setTitle('I am title');
+
+    dialog.open();
+
+    window.setTimeout(function () {
+        dialog.close();
+    }, 3000);
+</script>
+</body>
+</html>

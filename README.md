@@ -59,4 +59,40 @@ Type: `Object`
 
 事件对象，可缺省。
 
+## PileDialog.append(thing)
 
+向对话框追加内容。
+
+### thing
+Type: `PileDialog.Para` or `PileDialog.Btn` or `String`（将自动转换成`PileDialog.Para`） or `Object`（将尝试转换成`PileDialog.Btn`）
+
+需要追加的内容，可以是字符串也可以是按键对象。
+
+## PileDialog.prepend(thing[, index])
+
+向对话框插入内容。
+
+### index
+
+需要插入的位置序号，默认为0（即第一个成员之前）。
+
+## PileDialog.find(thing/index)
+
+寻找对话框内容中的某个成员，参数可以是需要寻找的成员本身，也可以是成员的序号。
+
+## PileDialog.remove(thing/index)
+
+移除对话框内容中的某个成员，参数可以是需要移除的成员本身，也可以是成员的序号。
+
+## PileDialog.clear()
+
+清空对话框中的所有内容。
+
+## PileDialog.setContent(content)
+
+设置对话框中的内容（覆盖原有内容）。
+
+### content
+Type: `Array`
+
+内容成员数组。
