@@ -34,7 +34,7 @@ Type: `Object`
 #### options.content
 Type: `Object`
 
-对话框的内容。是一个一维数组，数组成员可以是`PileDialog.Para`、`PileDialog.Btn`、`String`（将自动转换成`PileDialog.Para`）、`Object`（将尝试转换成`PileDialog.Btn`）。
+对话框的内容。是一个一维数组，数组成员可以是`PileDialog.Para`、`PileDialog.Btn`、`String`（将自动转换成`PileDialog.Para`）、`Object`（将尝试转换成`PileDialog.Button`）。
 
 ## PileDialog.setTitle(title)
 设置对话框的标题。
@@ -64,11 +64,34 @@ Type: `Object`
 向对话框追加内容。
 
 ### thing
-Type: `PileDialog.Para` or `PileDialog.Btn` or `String`（将自动转换成`PileDialog.Para`） or `Object`（将尝试转换成`PileDialog.Btn`）
+Type: `PileDialog.Para` or `PileDialog.Btn` or `String`（将自动转换成`PileDialog.Para`） or `Object`（将尝试转换成`PileDialog.Button`）
 
 需要追加的内容，可以是字符串也可以是按键对象。
 
 ## PileDialog.prepend(thing[, index])
+
+```javascript
+// 追加一段文本
+dialog.append('New content 1');
+dialog.append(new PileDialog.Para({
+    text: 'New content 2',
+    style: 'color: red;'
+});
+
+// 追加一个按键
+dialog.append({
+    text: 'New Button 1',
+    click: function () {
+        this.close();   // 点击后关闭对话框
+    }
+});
+dialog.append(new PileDialog.Button({
+    text: 'New Button 1',
+    click: function () {
+        this.close();   // 点击后关闭对话框
+    }
+}));
+```
 
 向对话框插入内容。
 
@@ -76,13 +99,25 @@ Type: `PileDialog.Para` or `PileDialog.Btn` or `String`（将自动转换成`Pil
 
 需要插入的位置序号，默认为0（即第一个成员之前）。
 
+```javascript
+dialog.prepend('New content 3', 1);
+```
+
 ## PileDialog.find(thing/index)
 
 寻找对话框内容中的某个成员，参数可以是需要寻找的成员本身，也可以是成员的序号。
 
+```javascript
+console.log(dialog.find(1));
+```
+
 ## PileDialog.remove(thing/index)
 
 移除对话框内容中的某个成员，参数可以是需要移除的成员本身，也可以是成员的序号。
+
+```javascript
+dialog.remove(1);
+```
 
 ## PileDialog.clear()
 
@@ -119,6 +154,12 @@ Type: `String`
 Type: `Function`
 
 事件监听的回调函数，在函数中`return false`能阻止事件继续向后面的监听器传播，以及阻止事件的默认行为（如阻止对话框打开/关闭）。
+
+```javascript
+dialog.on('open', function (e) {
+    console.log('Dialog opened:', this, e);
+});
+```
 
 ## PileDialog.trigger(type)
 
