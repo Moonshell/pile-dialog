@@ -35,7 +35,7 @@ Type: `Object`
 
 对话框的内容。
 
-## setTitle(title)
+## PileDialog.setTitle(title)
 设置对话框的标题。
 
 ```javascript
@@ -47,10 +47,10 @@ Type: `String`
 
 标题文本
 
-## hideTitle() / showTitle()
+## PileDialog.hideTitle() / PileDialog.showTitle()
 隐藏/显示对话框的标题
 
-## open([e]) / close([e])
+## PileDialog.open([e]) / PileDialog.close([e])
 打开/关闭对话框。
 
 ### e
