@@ -31,6 +31,7 @@ body {
     .dialog-wrap.default .dialog-box .dialog-title {
       height: 2.75rem;
       line-height: 2.75rem;
+      margin: 0;
       padding-left: 1.05rem;
       padding-right: 1.05rem;
       border-radius: 0.2rem 0.2rem 0rem 0rem;
@@ -60,7 +61,7 @@ body {
         display: block;
         width: 1.4rem;
         height: 1.4rem;
-        background: transparent url("#include(dialog-close-btn.png)") no-repeat scroll 0 0;
+        background: transparent url("#include(../images/dialog-close-btn.png)") no-repeat scroll 0 0;
         background-size: 1.4rem 1.4rem; }
     .dialog-wrap.default .dialog-box .dialog-content {
       padding-bottom: 1.25rem;
