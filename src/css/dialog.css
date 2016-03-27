@@ -189,7 +189,8 @@ body {
   z-index: 1000000;
   width: 100%;
   height: auto;
-  text-align: center; }
+  text-align: center;
+  pointer-events: none; }
   .dialog-wrap.open {
     display: block; }
 
