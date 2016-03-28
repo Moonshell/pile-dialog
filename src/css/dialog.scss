@@ -18,6 +18,7 @@ $transition_time: 300ms;
       .dialog-title {
         height: px2rem(110px);
         line-height: px2rem(110px);
+        margin: 0;
         padding-left: px2rem(42px);
         padding-right: px2rem(42px);
 
@@ -40,7 +41,7 @@ $transition_time: 300ms;
           display: block;
           width: px2rem(56px);
           height: px2rem(56px);
-          background: transparent url('#include(dialog-close-btn.png)') no-repeat scroll 0 0;
+          background: transparent url('#include(../images/dialog-close-btn.png)') no-repeat scroll 0 0;
           background-size: px2rem(56px 56px);
         }
       }

@@ -401,6 +401,34 @@
 
     /****************************************/
 
+    var Promise = PileDialog.Promise = function () {
+        this.callbacks = [];
+    };
+
+    Promise.prototype = {
+        'construct': Promise,
+        'resolve': function (result) {
+            this.complete("resolve", result);
+        },
+        'reject': function (result) {
+            this.complete("reject", result);
+        },
+        'complete': function (type, result) {
+            while (this.callbacks[0]) {
+                this.callbacks.shift()[type](result);
+            }
+        },
+        'then': function (successHandler, failedHandler) {
+            this.callbacks.push({
+                resolve: successHandler,
+                reject: failedHandler
+            });
+            return this;
+        }
+    };
+
+    /****************************************/
+
     PileDialog.createDefaultDialogs = function () {
         PileDialog.toastDialog = new PileDialog({
             prop: {
@@ -434,7 +462,66 @@
                 }, time);
             }
         };
+        // ----------
+        PileDialog.alertDialog = new PileDialog({
+            prop: {
+                skin: 'default',
+                cover: true,
+                closeBtn: true,
+                lock: false
+            },
+            content: [
+                {
+                    text: '确定',
+                    click: function () {
+                        this._resolved = true;
+                        this.close();
+                    }
+                }
+            ]
+        });
+        PileDialog.alertDialog.on('close', function (e) {
+            var promise = this._promise,
+                resolved = this._resolved;
+            promise && (resolved ? promise.resolve(e) : promise.reject(e));
+        });
+        PileDialog.alert = function (content, title) {
+            var dialog = PileDialog.alertDialog,
+                btnOk = dialog.find(-1),
+                promise = new Promise();
+            dialog.remove(btnOk);
+            dialog.clear();
+            dialog.append(content);
+            dialog.append(btnOk);
+            dialog.setTitle(title || '提示');
+
+            dialog._promise = promise;
+            dialog._resolved = false;
+            
+            dialog.open();
+            return promise;
+        };
     };
+
+    PileDialog.waitDefaultDialog = function (dialogName, funcName) {
+        if (PileDialog[dialogName]) {
+            console.error('PileDialog.%s 已存在。\n(PileDialog.%s already exists.)', dialogName, dialogName);
+            return;
+        }
+        if (PileDialog[funcName]) {
+            console.error('PileDialog.%s 已存在。\n(PileDialog.%s already exists.)', funcName, funcName);
+            return;
+        }
+        PileDialog[funcName] = function () {
+            // console.log('Dialog.%s 还没有准备好……', funcName);
+            var args = arguments;
+            window.setTimeout(function () {
+                PileDialog[funcName].apply(PileDialog[dialogName], args);
+            }, 50);
+        };
+    };
+
+    PileDialog.waitDefaultDialog('toastDialog', 'toast');
 
     if (document.addEventListener) {
         document.addEventListener('DOMContentLoaded', PileDialog.createDefaultDialogs);
