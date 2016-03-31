@@ -5,15 +5,13 @@ $transition_time: 300ms;
 .dialog-wrap {
   // 默认皮肤
   &.default {
-    left: 0;
-    bottom: 0;
-
     .dialog-box {
-      border-radius: px2rem(8px 8px 0 0);
+      border-radius: px2rem(8px);
       background-color: #FFFFFF;
       box-shadow: 0 0 px2rem(15px) rgba(0, 0, 0, .3);
 
       margin: px2rem(0 16px);
+      min-width: 50%;
 
       .dialog-title {
         height: px2rem(110px);
@@ -100,7 +98,7 @@ $transition_time: 300ms;
   }
   // 扁平化皮肤
   &.flat {
-    left: 0;
+    top: auto;
     bottom: 0;
 
     .dialog-box {
@@ -160,8 +158,9 @@ $transition_time: 300ms;
   }
   // 消息皮肤
   &.toast {
-    left: 0;
+    top: auto;
     bottom: px2rem(150px);
+    height: auto;
 
     .dialog-box {
       display: inline-block;
@@ -214,15 +213,17 @@ $transition_time: 300ms;
 .dialog-wrap {
   display: none;
   &.open {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  //display: flex;
-  //align-items: center;
-  //justify-content: center;
+
   position: fixed;
+  top: 0;
+  left: 0;
   z-index: 1000000;
   width: 100%;
-  height: auto;
+  height: 100%;
 
   text-align: center;
 
@@ -257,6 +258,8 @@ $transition_time: 300ms;
   opacity: 0;
 
   text-align: left;
+
+  pointer-events: auto;
 
   &.show {
     transform: translate3d(0, 0, 0);
