@@ -1,8 +1,8 @@
 /**
  * Pile Dialog
  *
- * Ver 0.10.1
- * Date 2016/3/3
+ * Ver {{VERSION}}
+ * Date 2016/3/31
  *
  * Created by krimeshu on 2016/1/13.
  */
@@ -317,6 +317,14 @@
 
     PileDialog.CHILD_PROTO = {
         'dialogType': TYPE.CHILD,
+        'setAttr': function (attr, value) {
+            var self = this;
+            self.dom.setAttribute(attr, value);
+        },
+        'removeAttr': function (attr) {
+            var self = this;
+            self.dom.removeAttribute(attr);
+        },
         'setText': function (text) {
             var self = this;
             self.dom.innerHTML = text;
@@ -388,8 +396,9 @@
         self.dom.className = 'dialog-btn';
         self.dom.innerHTML = text;
         self.dom.addEventListener('click', function (e) {
-            var dialog = self.dialog || null;
-            self.click.apply(dialog, [e]);
+            if (!self.dom.hasAttribute('disabled')) {
+                self.click(e);
+            }
         });
 
         self.setStyle(style);
@@ -474,8 +483,9 @@
                 {
                     text: '确定',
                     click: function () {
-                        this._resolved = true;
-                        this.close();
+                        var dialog = this.dialog;
+                        dialog._resolved = true;
+                        dialog.close();
                     }
                 }
             ]
@@ -497,7 +507,7 @@
 
             dialog._promise = promise;
             dialog._resolved = false;
-            
+
             dialog.open();
             return promise;
         };

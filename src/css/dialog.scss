@@ -11,7 +11,7 @@ $transition_time: 300ms;
       box-shadow: 0 0 px2rem(15px) rgba(0, 0, 0, .3);
 
       margin: px2rem(0 16px);
-      min-width: 50%;
+      min-width: 40%;
 
       .dialog-title {
         height: px2rem(110px);
@@ -82,7 +82,7 @@ $transition_time: 300ms;
 
       .dialog-btn {
         margin: px2rem(50px 42px 0 42px);
-        padding: 0;
+        padding: px2rem(0 20px);
         height: px2rem(80px);
         line-height: px2rem(80px);
 
@@ -93,6 +93,14 @@ $transition_time: 300ms;
         color: #545253;
         font-size: px2rem(30px);
         text-align: center;
+
+        &:active {
+          background-color: darken(#FDF986, 50%);
+        }
+
+        &[disabled] {
+          background-color: #C5C5C5;
+        }
       }
     }
   }
@@ -280,6 +288,8 @@ $transition_time: 300ms;
     right: 0;
 
     transform: translate3d(0, 0, 0);
+
+    cursor: pointer;
   }
 
   .dialog-content {
@@ -296,6 +306,8 @@ $transition_time: 300ms;
   .dialog-btn {
     display: block;
     text-align: center;
+
+    cursor: pointer;
   }
 }
 
