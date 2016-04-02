@@ -1,1 +1,1 @@
-{"name":"pile-dialog","version":"0.1.8","fcOpt":{"scOpt":{},"pcOpt":{},"alOpt":{},"upOpt":{},"tasks":["prepare_build","replace_const","join_include","sprite_crafter","prefix_crafter","allot_link","run_csso","optimize_image","do_dist"]}}
+{"name":"pile-dialog","version":"0.1.8","fcOpt":{"scOpt":{},"pcOpt":{},"alOpt":{},"upOpt":{},"tasks":["prepare_build","replace_const","compile_sass","join_include","sprite_crafter","prefix_crafter","allot_link","run_csso","optimize_image","do_dist","do_upload"]}}

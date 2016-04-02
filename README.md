@@ -1,6 +1,8 @@
 # pile-dialog
 
-堆叠式对话框。
+堆叠式对话框，可直接使用`dist`中的发布版本，也可以使用`front-custos`编译`src`中的源码。
+
+[front-custos](https://github.com/Moonshell/front-custos)
 
 ![basic-intro](https://github.com/Moonshell/pile-dialog/raw/master/basic-intro.png)
 
