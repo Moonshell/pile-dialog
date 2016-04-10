@@ -25,6 +25,8 @@
       "optimize_image",
       "do_dist",
       "do_upload"
-    ]
+    ],
+    "innerSrcDir": "./src",
+    "innerDistDir": "./dist"
   }
 }
