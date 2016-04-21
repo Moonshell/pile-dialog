@@ -105,9 +105,11 @@ body {
 
 .dialog-wrap.flat {
   top: auto;
-  bottom: 0; }
+  bottom: 0;
+  align-items: flex-end; }
   .dialog-wrap.flat .dialog-box {
-    background-color: #FFFFFF; }
+    background-color: #FFFFFF;
+    width: 100%; }
     .dialog-wrap.flat .dialog-box .dialog-title {
       height: 50px;
       line-height: 50px;
@@ -118,7 +120,7 @@ body {
       display: none; }
     .dialog-wrap.flat .dialog-box .dialog-content {
       color: #535252;
-      font-size: 12px; }
+      font-size: 14px; }
       .dialog-wrap.flat .dialog-box .dialog-content .weak {
         color: #969696; }
       .dialog-wrap.flat .dialog-box .dialog-content .small {
@@ -191,6 +193,8 @@ body {
 
 .dialog-wrap {
   display: none;
+  align-items: center;
+  justify-content: center;
   position: fixed;
   top: 0;
   left: 0;
@@ -200,9 +204,7 @@ body {
   text-align: center;
   pointer-events: none; }
   .dialog-wrap.open {
-    display: flex;
-    align-items: center;
-    justify-content: center; }
+    display: flex; }
 
 .dialog-cover {
   position: fixed;

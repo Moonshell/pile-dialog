@@ -1,4 +1,3 @@
-
 $transition_time: 300ms;
 
 /* fragBegin: without-set-rem */
@@ -109,9 +108,11 @@ $transition_time: 300ms;
   &.flat {
     top: auto;
     bottom: 0;
+    align-items: flex-end;
 
     .dialog-box {
       background-color: #FFFFFF;
+      width: 100%;
 
       .dialog-title {
         height: px2rem(100px);
@@ -128,7 +129,7 @@ $transition_time: 300ms;
 
       .dialog-content {
         color: #535252;
-        font-size: px2rem(24);
+        font-size: px2rem(28);
 
         .weak {
           color: #969696;
@@ -223,9 +224,9 @@ $transition_time: 300ms;
   display: none;
   &.open {
     display: flex;
-    align-items: center;
-    justify-content: center;
   }
+  align-items: center;
+  justify-content: center;
 
   position: fixed;
   top: 0;

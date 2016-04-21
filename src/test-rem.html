@@ -55,6 +55,16 @@
                     this.dialog.remove(-1);
                     PileDialog.alert('Button removed.');
                 }
+            },
+            {
+                text: 'Alert example',
+                click: function () {
+                    PileDialog.alertDialog.setProp('skin', 'flat');
+                    PileDialog.alert('Hello world~').then(function () {
+                        PileDialog.alertDialog.setProp('skin', 'default');
+                        PileDialog.toast('You closed the alert dialog.');
+                    });
+                }
             }
         ]
     });
