@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <title>Test Page</title>
+</head>
+<body>
+
+<h1>Let's test it here.</h1>
+<button onclick="dialog.open();">Open the dialog.</button>
+
+<script src="pile-dialog-px.js"></script>
+<!-- If your page has not set a different font size of html tag, use the "pile-dialog-rem.js" instead. -->
+<script>
+    var dialog = new PileDialog({
+        prop: {
+            skin: 'default',
+            cover: true,
+            closeBtn: true,
+            lock: false
+        },
+        content: [
+            'Hello world!',
+            {
+                text: 'Close dialog',
+                click: function () {
+                    this.dialog.close();
+                }
+            },
+            {
+                text: 'Modify paragraph 1',
+                click: function () {
+                    var para1 = this.dialog.find(0);
+                    para1.setText('Now is: ' + new Date().toUTCString());
+                }
+            },
+            {
+                text: 'Do not close dialog',
+                click: function () {
+                    PileDialog.toast('OK, got it');
+                }
+            },
+            {
+                text: 'Remove button above this',
+                click: function () {
+                    this.dialog.remove(3);
+                    this.setAttr('disabled', 'disabled');
+                }
+            },
+            {
+                text: 'Remove this button',
+                click: function () {
+                    this.dialog.remove(-1);
+                    PileDialog.alert('Button removed.');
+                }
+            }
+        ]
+    });
+
+    dialog.setTitle('I am title');
+
+    dialog.open();
+</script>
+</body>
+</html>

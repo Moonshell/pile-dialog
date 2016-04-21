@@ -1,0 +1,24 @@
+@import "common_function";
+
+// px版不转成rem单位
+@function px2rem($sizes) {
+  $result: '';
+
+  @each $size in $sizes {
+    $rem: $size;
+    @if $result != '' {
+      $result: $result + ' ';
+    }
+
+    @if type_of($size) == number {
+      $rem: (stripUnits($size / $baseFontRatio)) + px;
+    }
+
+    $result: $result + $rem;
+  }
+
+  //$result : $result + ' ' + '/*#{$sizes}*/';
+  @return unquote($result);
+}
+
+@import "dialog";
