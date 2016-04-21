@@ -238,6 +238,9 @@ $transition_time: 300ms;
   text-align: center;
 
   pointer-events: none;
+  .dialog-box, .dialog-cover {
+    pointer-events: auto;
+  }
 }
 
 .dialog-cover {
@@ -268,8 +271,6 @@ $transition_time: 300ms;
   opacity: 0;
 
   text-align: left;
-
-  pointer-events: auto;
 
   &.show {
     transform: translate3d(0, 0, 0);

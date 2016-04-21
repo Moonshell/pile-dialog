@@ -205,6 +205,8 @@ body {
   pointer-events: none; }
   .dialog-wrap.open {
     display: flex; }
+  .dialog-wrap .dialog-box, .dialog-wrap .dialog-cover {
+    pointer-events: auto; }
 
 .dialog-cover {
   position: fixed;
@@ -226,8 +228,7 @@ body {
   transition: transform 300ms ease, opacity 300ms ease;
   transform: translate3d(0, 100%, 0);
   opacity: 0;
-  text-align: left;
-  pointer-events: auto; }
+  text-align: left; }
   .dialog-box.show {
     transform: translate3d(0, 0, 0);
     opacity: 1; }

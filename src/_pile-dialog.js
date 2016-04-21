@@ -28,7 +28,7 @@ var PileDialog = function (opt) {
     self.doms.closeBtn = wrap.getElementsByClassName('dialog-close-btn')[0];
     self.doms.content = wrap.getElementsByClassName('dialog-content')[0];
 
-    wrap.addEventListener('touchmove', function (e) {
+    self.doms.cover.addEventListener('touchmove', function (e) {
         e.preventDefault();
     });
     self.doms.cover.addEventListener('click', function () {
