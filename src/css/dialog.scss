@@ -2,6 +2,8 @@
 
 $transition_time: 300ms;
 
+/* fragBegin: without-set-rem */
+
 .dialog-wrap {
   // 默认皮肤
   &.default {
@@ -311,3 +313,4 @@ $transition_time: 300ms;
   }
 }
 
+/* fragEnd: without-set-rem */

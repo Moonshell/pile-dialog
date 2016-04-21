@@ -11,7 +11,8 @@
 <h1>Let's test it here.</h1>
 <button onclick="dialog.open();">Open the dialog.</button>
 
-<script src="pile-dialog.js"></script>
+<script src="pile-dialog.with-rem-setting.js"></script>
+<script src="pile-dialog.js" type="text/plain"></script> <!-- If your page has already set the font size of html tag, use this file instead. -->
 <script>
     var dialog = new PileDialog({
         prop: {

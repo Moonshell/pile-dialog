@@ -22,6 +22,7 @@ html {
 body {
   font-size: 14px; }
 
+/* fragBegin: without-set-rem */
 .dialog-wrap.default .dialog-box {
   border-radius: 0.2rem;
   background-color: #FFFFFF;
@@ -248,3 +249,5 @@ body {
     display: block;
     text-align: center;
     cursor: pointer; }
+
+/* fragEnd: without-set-rem */

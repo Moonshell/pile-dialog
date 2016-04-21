@@ -17,7 +17,7 @@
         };
 
     var templateText = '#include("inc/_template.html", {"_inlineString": true})',
-        styleText = '#include("css/dialog.css", {"_inlineString": true})';
+        styleText = '#include("css/dialog.css", {"_inlineString": true, "_fragName": "without-set-rem"})';
 
     var style = document.createElement('STYLE');
     style.innerHTML = styleText;
