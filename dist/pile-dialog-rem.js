@@ -1,7 +1,7 @@
 /**
  * Pile Dialog
  *
- * Ver 0.2.2
+ * Ver 0.2.3
  * Date 2016/4/21
  *
  * Created by krimeshu on 2016/1/13.

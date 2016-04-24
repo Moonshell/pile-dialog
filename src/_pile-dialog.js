@@ -1,4 +1,3 @@
-
 var PileDialog = function (opt) {
     var self = this;
 
@@ -264,10 +263,13 @@ PileDialog.prototype = {
         self.doms.cover.classList.remove('show');
         self.doms.box.classList.remove('show');
     },
+    '_isArray': function (tar) {
+        return Object.prototype.toString.call(tar) === '[object Array]'
+    },
     'on': function (type, callback) {
         var self = this,
             typeCallbacks = self.callbacks[type];
-        if (Object.prototype.toString.call(typeCallbacks) != '[object Array]') {
+        if (!self._isArray(typeCallbacks)) {
             this.callbacks[type] = typeCallbacks = [];
         }
         typeCallbacks.push(callback);
@@ -469,13 +471,18 @@ PileDialog.createDefaultDialogs = function () {
             resolved = this._resolved;
         promise && (resolved ? promise.resolve(e) : promise.reject(e));
     });
-    PileDialog.alert = function (content, title) {
+    PileDialog.alert = function (contents, title) {
         var dialog = PileDialog.alertDialog,
             btnOk = dialog.find(-1),
             promise = new Promise();
+        if (!dialog._isArray(contents)) {
+            contents = [contents];
+        }
         dialog.remove(btnOk);
         dialog.clear();
-        dialog.append(content);
+        contents.forEach(function (content) {
+            dialog.append(content);
+        });
         dialog.append(btnOk);
         dialog.setTitle(title || '提示');
 
