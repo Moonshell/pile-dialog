@@ -23,13 +23,13 @@ body {
   font-size: 14px; }
 
 /* fragBegin: without-set-rem */
-.dialog-wrap.default .dialog-box {
+.pile-dialog-wrap.default .dialog-box {
   border-radius: 4px;
   background-color: #FFFFFF;
   box-shadow: 0 0 7.5px rgba(0, 0, 0, 0.3);
   margin: 0px 8px;
   min-width: 40%; }
-  .dialog-wrap.default .dialog-box .dialog-title {
+  .pile-dialog-wrap.default .dialog-box .dialog-title {
     height: 55px;
     line-height: 55px;
     margin: 0;
@@ -40,7 +40,7 @@ body {
     background-color: #FFFFFF;
     color: #333333;
     font-size: 15px; }
-    .dialog-wrap.default .dialog-box .dialog-title::after {
+    .pile-dialog-wrap.default .dialog-box .dialog-title::after {
       content: "";
       display: block;
       position: absolute;
@@ -53,41 +53,41 @@ body {
       -webkit-transform: scale(0.5);
       transform: scale(0.5);
       border-bottom: 1px solid #DADADA; }
-  .dialog-wrap.default .dialog-box .dialog-close-btn {
+  .pile-dialog-wrap.default .dialog-box .dialog-close-btn {
     width: 28px;
     height: 28px;
     padding: 12.5px 13.5px 14.5px 13.5px; }
-    .dialog-wrap.default .dialog-box .dialog-close-btn::after {
+    .pile-dialog-wrap.default .dialog-box .dialog-close-btn::after {
       content: "";
       display: block;
       width: 28px;
       height: 28px;
       background: transparent url("#include(../images/dialog-close-btn.png)") no-repeat scroll 0 0;
       background-size: 28px 28px; }
-  .dialog-wrap.default .dialog-box .dialog-content {
+  .pile-dialog-wrap.default .dialog-box .dialog-content {
     padding-bottom: 25px;
     border-radius: 4px 4px 0px 0px;
     background-color: #FFFFFF;
     color: #333333;
     font-size: 14px; }
-    .dialog-wrap.default .dialog-box .dialog-content .weak {
+    .pile-dialog-wrap.default .dialog-box .dialog-content .weak {
       color: #868686; }
-    .dialog-wrap.default .dialog-box .dialog-content .small {
+    .pile-dialog-wrap.default .dialog-box .dialog-content .small {
       font-size: 12px; }
-    .dialog-wrap.default .dialog-box .dialog-content .del {
+    .pile-dialog-wrap.default .dialog-box .dialog-content .del {
       text-decoration: line-through; }
-    .dialog-wrap.default .dialog-box .dialog-content .em {
+    .pile-dialog-wrap.default .dialog-box .dialog-content .em {
       font-style: normal;
       text-shadow: 0 0 4px #FCF988; }
-    .dialog-wrap.default .dialog-box .dialog-content .link {
+    .pile-dialog-wrap.default .dialog-box .dialog-content .link {
       display: inline-block;
       padding: 2px 0px;
       color: #E65D52;
       border-bottom: 1px solid #E65D52; }
-  .dialog-wrap.default .dialog-box .dialog-para {
+  .pile-dialog-wrap.default .dialog-box .dialog-para {
     margin: 25px 21px 0px 21px;
     padding: 0; }
-  .dialog-wrap.default .dialog-box .dialog-btn {
+  .pile-dialog-wrap.default .dialog-box .dialog-btn {
     margin: 25px 21px 0px 21px;
     padding: 0px 10px;
     height: 40px;
@@ -98,42 +98,42 @@ body {
     color: #545253;
     font-size: 15px;
     text-align: center; }
-    .dialog-wrap.default .dialog-box .dialog-btn:active {
+    .pile-dialog-wrap.default .dialog-box .dialog-btn:active {
       background-color: #827e02; }
-    .dialog-wrap.default .dialog-box .dialog-btn[disabled] {
+    .pile-dialog-wrap.default .dialog-box .dialog-btn[disabled] {
       background-color: #C5C5C5; }
 
-.dialog-wrap.flat {
+.pile-dialog-wrap.flat {
   top: auto;
   bottom: 0;
   align-items: flex-end; }
-  .dialog-wrap.flat .dialog-box {
+  .pile-dialog-wrap.flat .dialog-box {
     background-color: #FFFFFF;
     width: 100%; }
-    .dialog-wrap.flat .dialog-box .dialog-title {
+    .pile-dialog-wrap.flat .dialog-box .dialog-title {
       height: 50px;
       line-height: 50px;
       color: #333333;
       text-align: center;
       font-size: 16px; }
-    .dialog-wrap.flat .dialog-box .dialog-close-btn {
+    .pile-dialog-wrap.flat .dialog-box .dialog-close-btn {
       display: none; }
-    .dialog-wrap.flat .dialog-box .dialog-content {
+    .pile-dialog-wrap.flat .dialog-box .dialog-content {
       color: #535252;
       font-size: 14px; }
-      .dialog-wrap.flat .dialog-box .dialog-content .weak {
+      .pile-dialog-wrap.flat .dialog-box .dialog-content .weak {
         color: #969696; }
-      .dialog-wrap.flat .dialog-box .dialog-content .small {
+      .pile-dialog-wrap.flat .dialog-box .dialog-content .small {
         font-size: 12px; }
-      .dialog-wrap.flat .dialog-box .dialog-content .del {
+      .pile-dialog-wrap.flat .dialog-box .dialog-content .del {
         text-decoration: line-through; }
-      .dialog-wrap.flat .dialog-box .dialog-content .em {
+      .pile-dialog-wrap.flat .dialog-box .dialog-content .em {
         font-style: normal;
         text-shadow: 0 0 4px #E86A3E; }
-    .dialog-wrap.flat .dialog-box .dialog-para {
+    .pile-dialog-wrap.flat .dialog-box .dialog-para {
       margin: 25px 35px 0px 35px;
       padding: 0; }
-    .dialog-wrap.flat .dialog-box .dialog-btn {
+    .pile-dialog-wrap.flat .dialog-box .dialog-btn {
       margin: 25px 0px 0px 0px;
       padding: 0;
       height: 60px;
@@ -143,7 +143,7 @@ body {
       color: #535252;
       font-size: 16px;
       text-align: center; }
-      .dialog-wrap.flat .dialog-box .dialog-btn::before {
+      .pile-dialog-wrap.flat .dialog-box .dialog-btn::before {
         content: "";
         display: block;
         position: absolute;
@@ -157,41 +157,41 @@ body {
         transform: scale(0.5);
         border-top: 1px solid #C5C5C5; }
 
-.dialog-wrap.toast {
+.pile-dialog-wrap.toast {
   top: auto;
   bottom: 75px;
   height: auto; }
-  .dialog-wrap.toast .dialog-box {
+  .pile-dialog-wrap.toast .dialog-box {
     display: inline-block;
     background-color: rgba(40, 40, 40, 0.95);
     border-radius: 50px;
     margin: 0 auto; }
-    .dialog-wrap.toast .dialog-box .dialog-title {
+    .pile-dialog-wrap.toast .dialog-box .dialog-title {
       height: 50px;
       line-height: 50px;
       color: #333333;
       text-align: center;
       font-size: 16px; }
-    .dialog-wrap.toast .dialog-box .dialog-close-btn {
+    .pile-dialog-wrap.toast .dialog-box .dialog-close-btn {
       display: none; }
-    .dialog-wrap.toast .dialog-box .dialog-content {
+    .pile-dialog-wrap.toast .dialog-box .dialog-content {
       color: #C5C5C5;
       font-size: 13px; }
-      .dialog-wrap.toast .dialog-box .dialog-content .weak {
+      .pile-dialog-wrap.toast .dialog-box .dialog-content .weak {
         color: #969696; }
-      .dialog-wrap.toast .dialog-box .dialog-content .small {
+      .pile-dialog-wrap.toast .dialog-box .dialog-content .small {
         font-size: 12px; }
-      .dialog-wrap.toast .dialog-box .dialog-content .del {
+      .pile-dialog-wrap.toast .dialog-box .dialog-content .del {
         text-decoration: line-through; }
-      .dialog-wrap.toast .dialog-box .dialog-content .em {
+      .pile-dialog-wrap.toast .dialog-box .dialog-content .em {
         font-style: normal;
         text-shadow: 0 0 4px #E86A3E; }
-    .dialog-wrap.toast .dialog-box .dialog-para {
+    .pile-dialog-wrap.toast .dialog-box .dialog-para {
       height: 50px;
       line-height: 50px;
       padding: 0px 35px; }
 
-.dialog-wrap {
+.pile-dialog-wrap {
   display: none;
   align-items: center;
   justify-content: center;
@@ -203,9 +203,9 @@ body {
   height: 100%;
   text-align: center;
   pointer-events: none; }
-  .dialog-wrap.open {
+  .pile-dialog-wrap.open {
     display: flex; }
-  .dialog-wrap .dialog-box, .dialog-wrap .dialog-cover {
+  .pile-dialog-wrap .dialog-box, .pile-dialog-wrap .dialog-cover {
     pointer-events: auto; }
 
 .dialog-cover {

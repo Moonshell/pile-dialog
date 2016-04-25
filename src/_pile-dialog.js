@@ -18,7 +18,7 @@ var PileDialog = function (opt) {
     self.callbacks = {};
 
     var wrap = self.doms.wrap = document.createElement('DIV');
-    wrap.className = 'dialog-wrap';
+    wrap.className = 'pile-dialog-wrap';
     wrap.innerHTML = templateText;
 
     self.doms.cover = wrap.getElementsByClassName('dialog-cover')[0];
@@ -73,7 +73,7 @@ PileDialog.prototype = {
         prop[name] = value;
         switch (name) {
             case 'skin':
-                self.doms.wrap.className = 'dialog-wrap ' + value;
+                self.doms.wrap.className = 'pile-dialog-wrap ' + value;
                 break;
             case 'cover':
                 self.doms.cover.style.display = value ? 'block' : 'none';

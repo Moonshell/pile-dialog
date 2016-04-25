@@ -2,7 +2,7 @@ $transition_time: 300ms;
 
 /* fragBegin: without-set-rem */
 
-.dialog-wrap {
+.pile-dialog-wrap {
   // 默认皮肤
   &.default {
     .dialog-box {
@@ -220,7 +220,7 @@ $transition_time: 300ms;
   }
 }
 
-.dialog-wrap {
+.pile-dialog-wrap {
   display: none;
   &.open {
     display: flex;
