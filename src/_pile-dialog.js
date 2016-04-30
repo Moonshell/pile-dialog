@@ -1,3 +1,26 @@
+var TRANSITION_TIME = 300,
+    TYPE = {
+        DIALOG: 'DIALOG',
+        PARA: 'PARAGRAPH',
+        BUTTON: 'BUTTON',
+        CHILD: 'CHILD',
+        OTHER: 'OTHER'
+    };
+
+
+var style = document.createElement('STYLE');
+style.innerHTML = styleText;
+document.body.appendChild(style);
+
+var extend = function (extProto, baseProto) {
+    var undefined = void(0);
+    for (var p in baseProto) {
+        if (baseProto.hasOwnProperty(p) && extProto[p] === undefined) {
+            extProto[p] = baseProto[p];
+        }
+    }
+};
+
 var PileDialog = function (opt) {
     var self = this;
 
@@ -341,12 +364,13 @@ PileDialog.Para = function (opt) {
     var self = this;
 
     var text = opt.text || '',
-        style = opt.style || {};
+        style = opt.style || {},
+        className = opt.className || 'dialog-btn';
 
     self.text = opt.text;
 
     self.dom = document.createElement('P');
-    self.dom.className = 'dialog-para';
+    self.dom.className = className;
     self.dom.innerHTML = text;
 
     self.setStyle(style);
@@ -362,14 +386,15 @@ PileDialog.Button = function (opt) {
     var self = this;
 
     var text = opt.text || '',
-        style = opt.style || {};
+        style = opt.style || {},
+        className = opt.className || 'dialog-btn';
 
     self.opt = opt;
     self.text = opt.text;
     self.click = opt.click;
 
     self.dom = document.createElement('A');
-    self.dom.className = 'dialog-btn';
+    self.dom.className = className;
     self.dom.innerHTML = text;
     self.dom.addEventListener('click', function (e) {
         if (!self.dom.hasAttribute('disabled')) {
@@ -383,6 +408,27 @@ PileDialog.Button = function (opt) {
 };
 
 PileDialog.Button.prototype = PileDialog.CHILD_PROTO;
+
+/****************************************/
+
+PileDialog.ButtonRow = function (opt) {
+    var self = this;
+
+    var items = opt.items || [],
+        className = opt.className || 'dialog-btn-row';
+
+    self.opt = opt;
+    self.items = items;
+
+    self.dom = document.createElement('DIV');
+
+};
+
+PileDialog.ButtonRow = extend({
+    append: function () {
+
+    }
+}, PileDialog.CHILD_PROTO);
 
 /****************************************/
 

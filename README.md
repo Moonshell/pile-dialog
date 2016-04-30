@@ -36,7 +36,7 @@ Type: `Object`
 #### options.content
 Type: `Object`
 
-对话框的内容。是一个一维数组，数组成员可以是`PileDialog.Para`、`PileDialog.Btn`、`String`（将自动转换成`PileDialog.Para`）、`Object`（将尝试转换成`PileDialog.Button`）。
+对话框的内容。是一个一维数组，数组成员可以是`PileDialog.Para`、`PileDialog.Button`、`String`（将自动转换成`PileDialog.Para`）、`Object`（将尝试转换成`PileDialog.Button`）。
 
 ## PileDialog.setTitle(title)
 设置对话框的标题。
@@ -66,7 +66,7 @@ Type: `Object`
 向对话框追加内容。
 
 ### thing
-Type: `PileDialog.Para` or `PileDialog.Btn` or `String`（将自动转换成`PileDialog.Para`） or `Object`（将尝试转换成`PileDialog.Button`）
+Type: `PileDialog.Para` or `PileDialog.Button` or `String`（将自动转换成`PileDialog.Para`） or `Object`（将尝试转换成`PileDialog.Button`）
 
 需要追加的内容，可以是字符串也可以是按键对象。
 
