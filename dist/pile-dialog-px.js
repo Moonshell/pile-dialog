@@ -1,7 +1,7 @@
 /**
  * Pile Dialog
  *
- * Ver 0.5.3
+ * Ver 0.5.4
  * Date 2016/4/21
  *
  * Created by krimeshu on 2016/1/13.
@@ -12,15 +12,7 @@
 
     /****************************************/
 
-    var TRANSITION_TIME = 300,
-    TYPES = {
-        DIALOG: 'DIALOG',
-        PARA: 'PARAGRAPH',
-        BUTTON: 'BUTTON',
-        CHILD: 'CHILD',
-        ROW: 'ROW',
-        OTHER: 'OTHER'
-    };
+    var TRANSITION_TIME = 300;
 
 var style = document.createElement('STYLE');
 style.innerHTML = styleText;
@@ -86,8 +78,83 @@ var utils = {
         return dom;
     }
 };
+;
 
-var PROTOTYPES = {
+var PileDialog = function (opt) {
+    var self = this;
+    if (!self instanceof PileDialog) {
+        return new PileDialog(opt);
+    }
+
+    var prop = opt.prop || {
+                skin: 'default',
+                cover: true,
+                closeBtn: true,
+                lock: false
+            },
+        title = opt.title || '',
+        content = opt.content || '',
+        onOpen = opt['onOpen'],
+        onClose = opt['onClose'];
+
+    self.children = [];
+
+    self.prop = {};
+    self.doms = {};
+    self.callbacks = {};
+
+    var wrap = self.doms.wrap = document.createElement('DIV');
+    wrap.className = 'pile-dialog-wrap';
+    wrap.innerHTML = templateText;
+
+    self.doms.cover = wrap.getElementsByClassName('dialog-cover')[0];
+    self.doms.box = wrap.getElementsByClassName('dialog-box')[0];
+    self.doms.title = wrap.getElementsByClassName('dialog-title')[0];
+    self.doms.closeBtn = wrap.getElementsByClassName('dialog-close-btn')[0];
+    self.doms.content = wrap.getElementsByClassName('dialog-content')[0];
+
+    self.doms.cover.addEventListener('touchmove', function (e) {
+        e.preventDefault();
+    });
+    self.doms.cover.addEventListener('click', function () {
+        if (!self.isLocked) {
+            self.close();
+        }
+    });
+    self.doms.closeBtn.addEventListener('click', function () {
+        self.close();
+    });
+
+    // 内容部分的DOM作为默认DOM
+    self.dom = self.doms.content;
+
+    document.body.appendChild(wrap);
+
+    self.setProp('skin', String(prop.skin || 'default'));
+    self.setProp('cover', !!prop.cover);
+    self.setProp('closeBtn', !!prop.closeBtn);
+    self.setProp('lock', !!prop.lock);
+
+    self.setTitle(title);
+    self.setContent(content);
+
+    onOpen && self.on('open', onOpen);
+    onClose && self.on('close', onClose);
+};
+
+
+/****************************************/
+
+PileDialog.topZIndex = 1000000;
+var TYPES = PileDialog.TYPES = {
+    DIALOG: 'DIALOG',
+    PARA: 'PARAGRAPH',
+    BUTTON: 'BUTTON',
+    CHILD: 'CHILD',
+    ROW: 'ROW',
+    OTHER: 'OTHER'
+};
+var PROTOTYPES = PileDialog.PROTOTYPES = {
     ENTITY: {
         'dialogType': TYPES.CHILD,
         'setAttr': function (attr, value) {
@@ -295,75 +362,7 @@ var PROTOTYPES = {
         }
     }
 };
-
-var PileDialog = function (opt) {
-    var self = this;
-    if (!self instanceof PileDialog) {
-        return new PileDialog(opt);
-    }
-
-    var prop = opt.prop || {
-                skin: 'default',
-                cover: true,
-                closeBtn: true,
-                lock: false
-            },
-        title = opt.title || '',
-        content = opt.content || '',
-        onOpen = opt['onOpen'],
-        onClose = opt['onClose'];
-
-    self.children = [];
-
-    self.prop = {};
-    self.doms = {};
-    self.callbacks = {};
-
-    var wrap = self.doms.wrap = document.createElement('DIV');
-    wrap.className = 'pile-dialog-wrap';
-    wrap.innerHTML = templateText;
-
-    self.doms.cover = wrap.getElementsByClassName('dialog-cover')[0];
-    self.doms.box = wrap.getElementsByClassName('dialog-box')[0];
-    self.doms.title = wrap.getElementsByClassName('dialog-title')[0];
-    self.doms.closeBtn = wrap.getElementsByClassName('dialog-close-btn')[0];
-    self.doms.content = wrap.getElementsByClassName('dialog-content')[0];
-
-    self.doms.cover.addEventListener('touchmove', function (e) {
-        e.preventDefault();
-    });
-    self.doms.cover.addEventListener('click', function () {
-        if (!self.isLocked) {
-            self.close();
-        }
-    });
-    self.doms.closeBtn.addEventListener('click', function () {
-        self.close();
-    });
-
-    // 内容部分的DOM作为默认DOM
-    self.dom = self.doms.content;
-
-    document.body.appendChild(wrap);
-
-    self.setProp('skin', String(prop.skin || 'default'));
-    self.setProp('cover', !!prop.cover);
-    self.setProp('closeBtn', !!prop.closeBtn);
-    self.setProp('lock', !!prop.lock);
-
-    self.setTitle(title);
-    self.setContent(content);
-
-    onOpen && self.on('open', onOpen);
-    onClose && self.on('close', onClose);
-};
-
-
-/****************************************/
-
-PileDialog.topZIndex = 1000000;
-PileDialog.TYPES = TYPES;
-PileDialog.PROTOTYPES = PROTOTYPES;
+;
 
 PileDialog.prototype = utils.extend({
     dialogType: TYPES.DIALOG,
@@ -456,23 +455,6 @@ PileDialog.prototype = utils.extend({
     }
 }, PROTOTYPES.ENTITY, PROTOTYPES.CONTAINER);
 
-/****************************************/
-
-PileDialog.Child = function (opt) {
-    var self = this;
-    if (!self instanceof PileDialog.Child) {
-        return new PileDialog.Child(opt);
-    }
-
-    self.dom = opt.dom;
-};
-
-PileDialog.Child.prototype = utils.extend({
-    dialogType: TYPES.CHILD
-}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
-
-/****************************************/
-
 PileDialog.Para = function (opt) {
     var self = this;
     if (!self instanceof PileDialog.Child) {
@@ -496,9 +478,7 @@ PileDialog.Para = function (opt) {
 PileDialog.Para.prototype = utils.extend({
     dialogType: TYPES.PARA
 }, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
-
-/****************************************/
-
+;
 PileDialog.Button = function (opt) {
     var self = this;
     if (!self instanceof PileDialog.Child) {
@@ -528,9 +508,20 @@ PileDialog.Button = function (opt) {
 PileDialog.Button.prototype = utils.extend({
     dialogType: TYPES.BUTTON
 }, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
+;
+PileDialog.Child = function (opt) {
+    var self = this;
+    if (!self instanceof PileDialog.Child) {
+        return new PileDialog.Child(opt);
+    }
 
-/****************************************/
+    self.dom = opt.dom;
+};
 
+PileDialog.Child.prototype = utils.extend({
+    dialogType: TYPES.CHILD
+}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
+;
 PileDialog.Row = function (opt) {
     var self = this;
     if (!self instanceof PileDialog.Row) {
@@ -556,8 +547,8 @@ PileDialog.Row = function (opt) {
 PileDialog.Row.prototype = utils.extend({
     dialogType: TYPES.ROW
 }, PROTOTYPES.ENTITY, PROTOTYPES.CONTAINER, PROTOTYPES.IN_CONTAINER);
+;
 
-/****************************************/
 
 var Promise = PileDialog.Promise = function () {
     this.callbacks = [];
@@ -584,8 +575,7 @@ Promise.prototype = {
         return this;
     }
 };
-
-/****************************************/
+;
 
 PileDialog.createDefaultDialogs = function () {
     PileDialog.toastDialog = new PileDialog({
@@ -771,7 +761,7 @@ if (document.addEventListener) {
     window.addEventListener('load', PileDialog.createDefaultDialogs);
 } else if (window.attachEvent) {
     window.attachEvent('onload', PileDialog.createDefaultDialogs);
-}
+};
 
 window.PileDialog = PileDialog;;
 })();
