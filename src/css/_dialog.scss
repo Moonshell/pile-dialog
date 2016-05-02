@@ -312,6 +312,10 @@ $transition_time: 300ms;
 
     cursor: pointer;
   }
+
+  .dialog-row {
+    display: flex;
+  }
 }
 
 /* fragEnd: without-set-rem */

@@ -26,27 +26,32 @@
             {
                 text: 'Close dialog',
                 click: function () {
-                    this.dialog.close();
+                    var dialog = this.dialog();
+                    dialog.close();
                 }
             },
             {
                 text: 'Modify paragraph 1',
                 click: function () {
-                    var para1 = this.dialog.find(0);
+                    var dialog = this.dialog();
+                    var para1 = dialog.find(0);
                     para1.setText('Now is: ' + new Date().toUTCString());
                 }
             },
             {
                 text: 'Remove this button',
                 click: function () {
-                    this.dialog.remove(this);
+                    var dialog = this.dialog();
+                    dialog.remove(this);
                     PileDialog.alert('Button removed.');
                 }
             },
             {
                 text: 'Remove button above this',
                 click: function () {
-                    this.dialog.remove(this.getPrev());
+                    var dialog = this.dialog();
+                    var above = this.prev();
+                    dialog.remove(above);
                     this.setAttr('disabled', 'disabled');
                 }
             },
@@ -63,7 +68,8 @@
             {
                 text: 'Remove the last button',
                 click: function () {
-                    this.dialog.remove(-1);
+                    var dialog = this.dialog();
+                    dialog.remove(-1);
                     PileDialog.alert('Button removed.');
                 }
             }

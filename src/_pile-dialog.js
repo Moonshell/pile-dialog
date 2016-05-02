@@ -133,10 +133,7 @@ var PROTOTYPES = {
                 typeof thing.text === 'string' &&
                 typeof thing.click === 'function') {
                 // 追加 按键（自动转为 Dialog.Button 对象）
-                child = new PileDialog.Button({
-                    text: thing.text,
-                    click: thing.click
-                });
+                child = new PileDialog.Button(thing);
             } else if (/\[object HTML.*?Element]/i.test(type)) {
                 // 追加 DOM（自动转为 Dialog.Child 对象）
                 child = new PileDialog.Child({
@@ -152,14 +149,12 @@ var PROTOTYPES = {
         '_prepend': function (child, _index) {
             var self = this,
                 index = _index | 0,
-                children = self.children,
-                dialog = self instanceof PileDialog ? self : self.dialog;
+                children = self.children
             // 添加前，先从原有 parent 和 Dialog 中移除
-            if (child.parent) {
-                child.parent.remove(child);
+            if (child._parent) {
+                child._parent.remove(child);
             }
-            child.parent = self;
-            child.dialog = dialog;
+            child._parent = self;
             children.splice(index, 0, child);
             var nextNode = utils.getChildElem(self.dom, index);
             if (nextNode) {
@@ -170,14 +165,12 @@ var PROTOTYPES = {
         },
         '_append': function (child) {
             var self = this,
-                children = self.children,
-                dialog = self instanceof PileDialog ? self : self.dialog;
+                children = self.children;
             // 添加前，先从原有 parent 和 Dialog 中移除
-            if (child.parent) {
-                child.parent.remove(child);
+            if (child._parent) {
+                child._parent.remove(child);
             }
-            child.parent = self;
-            child.dialog = dialog;
+            child._parent = self;
             children.push(child);
             self.dom.appendChild(child.dom);
         },
@@ -236,8 +229,7 @@ var PROTOTYPES = {
         '_remove': function (child) {
             var self = this,
                 children = self.children;
-            delete child.parent;
-            delete child.dialog;
+            delete child._parent;
             children.splice(children.indexOf(child), 1);
             self.dom.removeChild(child.dom);
         },
@@ -246,8 +238,7 @@ var PROTOTYPES = {
                 children = self.children,
                 len = children.length;
             for (var i = 0, child; (i < len) && (child = children[i]); i++) {
-                delete child.parent;
-                delete child.dialog;
+                delete child._parent;
             }
             self.children = [];
             self.dom.innerHTML = '';
@@ -263,19 +254,30 @@ var PROTOTYPES = {
         }
     },
     IN_CONTAINER: {
-        'getPrev': function () {
+        'prev': function () {
             var self = this,
-                parent = self && self.parent,
+                parent = self && self._parent,
                 children = parent && parent.children,
                 pos = children && children.indexOf(self);
             return pos >= 0 && parent && parent.find && parent.find(pos - 1);
         },
-        'getNext': function () {
+        'next': function () {
             var self = this,
-                parent = self && self.parent,
+                parent = self && self._parent,
                 children = parent && parent.children,
                 pos = children && children.indexOf(self);
             return pos >= 0 && parent && parent.find && parent.find(pos + 1);
+        },
+        'parent': function () {
+            var self = this;
+            return self._parent;
+        },
+        'dialog': function () {
+            var self = this;
+            while (self && !(self instanceof PileDialog)) {
+                self = self._parent;
+            }
+            return self;
         }
     }
 };
@@ -297,9 +299,10 @@ var PileDialog = function (opt) {
         onOpen = opt['onOpen'],
         onClose = opt['onClose'];
 
+    self.children = [];
+
     self.prop = {};
     self.doms = {};
-    self.children = [];
     self.callbacks = {};
 
     var wrap = self.doms.wrap = document.createElement('DIV');
@@ -344,8 +347,9 @@ var PileDialog = function (opt) {
 
 /****************************************/
 
-PileDialog.TYPES = TYPES;
 PileDialog.topZIndex = 1000000;
+PileDialog.TYPES = TYPES;
+PileDialog.PROTOTYPES = PROTOTYPES;
 
 PileDialog.prototype = utils.extend({
     dialogType: TYPES.DIALOG,
@@ -519,14 +523,18 @@ PileDialog.Row = function (opt) {
         return new PileDialog.Row(opt);
     }
 
-    var items = opt.items || [],
+    self.children = [];
+
+    var content = opt.content || '',
+        style = opt.style || {},
         className = opt.className || 'dialog-row';
 
     self.opt = opt;
-    self.items = items;
 
     self.dom = document.createElement('DIV');
     self.dom.className = className;
+
+    content && self.setContent(content);
 
     self.setStyle(style);
 };
@@ -610,7 +618,7 @@ PileDialog.createDefaultDialogs = function () {
             {
                 text: '确定',
                 click: function () {
-                    var dialog = this.parent;
+                    var dialog = this.dialog();
                     dialog._resolved = true;
                     dialog.close();
                 }
@@ -618,14 +626,16 @@ PileDialog.createDefaultDialogs = function () {
         ]
     });
     PileDialog.alertDialog.on('close', function (e) {
-        var promise = this._promise,
-            resolved = this._resolved;
+        var dialog = this,
+            promise = dialog._promise,
+            resolved = dialog._resolved;
         promise && (resolved ? promise.resolve(e) : promise.reject(e));
     });
     PileDialog.alert = function (contents, title) {
         var dialog = PileDialog.alertDialog,
             btnOk = dialog.find(-1),
             promise = new Promise();
+
         if (!utils.isArray(contents)) {
             contents = [contents];
         }
@@ -636,6 +646,80 @@ PileDialog.createDefaultDialogs = function () {
         });
         dialog.append(btnOk);
         dialog.setTitle(title || '提示');
+
+        dialog._promise = promise;
+        dialog._resolved = false;
+
+        dialog.open();
+        return promise;
+    };
+    // ----------
+    PileDialog.confirmDialog = new PileDialog({
+        prop: {
+            skin: 'default',
+            cover: true,
+            closeBtn: true,
+            lock: true
+        },
+        content: [
+            new PileDialog.Row({
+                content: [
+                    {
+                        text: '取消',
+                        style: {
+                            flex: 1
+                        },
+                        click: function () {
+                            var dialog = this.dialog();
+                            dialog._resolved = false;
+                            dialog.close();
+                        }
+                    },
+                    {
+                        text: '确定',
+                        style: {
+                            flex: 1,
+                            marginLeft: 0
+                        },
+                        click: function () {
+                            var dialog = this.dialog();
+                            dialog._resolved = true;
+                            dialog.close();
+                        }
+                    }
+                ]
+            })
+        ]
+    });
+    PileDialog.confirmDialog.on('close', function (e) {
+        var dialog = this,
+            promise = dialog._promise,
+            resolved = dialog._resolved;
+        promise && (resolved ? promise.resolve(e) : promise.reject(e));
+    });
+    PileDialog.confirm = function (contents, title, btnTextCancel, btnTextConfirm) {
+        var dialog = PileDialog.confirmDialog,
+            btnRow = dialog.find(-1),
+            promise = new Promise(),
+            btnText = {
+                cancel: btnTextCancel || '取消',
+                confirm: btnTextConfirm || '确定'
+            };
+
+        if (!utils.isArray(contents)) {
+            contents = [contents];
+        }
+        dialog.remove(btnRow);
+        dialog.clear();
+        contents.forEach(function (content) {
+            dialog.append(content);
+        });
+        dialog.append(btnRow);
+        dialog.setTitle(title || '提示');
+
+        // 设置取消键和确定键的文本
+        btnRow.find(0).setText(btnText.cancel);
+        btnRow.find(1).setText(btnText.confirm);
 
         dialog._promise = promise;
         dialog._resolved = false;
@@ -664,6 +748,8 @@ PileDialog.waitDefaultDialog = function (dialogName, funcName) {
 };
 
 PileDialog.waitDefaultDialog('toastDialog', 'toast');
+PileDialog.waitDefaultDialog('alertDialog', 'alert');
+PileDialog.waitDefaultDialog('confirmDialog', 'confirm');
 
 if (document.addEventListener) {
     document.addEventListener('DOMContentLoaded', PileDialog.createDefaultDialogs);
