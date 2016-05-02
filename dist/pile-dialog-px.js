@@ -1,7 +1,7 @@
 /**
  * Pile Dialog
  *
- * Ver 0.3.2
+ * Ver 0.2.5
  * Date 2016/4/21
  *
  * Created by krimeshu on 2016/1/13.
@@ -87,7 +87,7 @@ var utils = {
     }
 };
 
-var PROTO = {
+var PROTOTYPES = {
     ENTITY: {
         'dialogType': TYPES.CHILD,
         'setAttr': function (attr, value) {
@@ -349,6 +349,7 @@ var PileDialog = function (opt) {
     onClose && self.on('close', onClose);
 };
 
+PileDialog.PROTOTYPES = PROTOTYPES;
 PileDialog.topZIndex = 1000000;
 
 PileDialog.prototype = utils.extend({
@@ -440,7 +441,7 @@ PileDialog.prototype = utils.extend({
             }
         }
     }
-}, PROTO.ENTITY, PROTO.CONTAINER);
+}, PROTOTYPES.ENTITY, PROTOTYPES.CONTAINER);
 
 /****************************************/
 
@@ -457,7 +458,7 @@ PileDialog.Child = function (opt) {
     self.dom = opt.dom;
 };
 
-PileDialog.Child.prototype = utils.extend({}, PROTO.ENTITY, PROTO.IN_CONTAINER);
+PileDialog.Child.prototype = utils.extend({}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
 
 /****************************************/
 
@@ -478,12 +479,10 @@ PileDialog.Para = function (opt) {
     self.dom.innerHTML = text;
 
     self.setStyle(style);
-
-    self.dialogType = TYPES.PARA;
 };
 
 
-PileDialog.Para.prototype = utils.extend({}, PROTO.ENTITY, PROTO.IN_CONTAINER);
+PileDialog.Para.prototype = utils.extend({}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
 
 /****************************************/
 
@@ -511,11 +510,9 @@ PileDialog.Button = function (opt) {
     });
 
     self.setStyle(style);
-
-    self.dialogType = TYPES.PARA;
 };
 
-PileDialog.Button.prototype = utils.extend({}, PROTO.ENTITY, PROTO.IN_CONTAINER);
+PileDialog.Button.prototype = utils.extend({}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
 
 /****************************************/
 
@@ -532,11 +529,12 @@ PileDialog.Row = function (opt) {
     self.items = items;
 
     self.dom = document.createElement('DIV');
+    self.dom.className = className;
 
-    // Todo: 继续完善
+    self.setStyle(style);
 };
 
-PileDialog.Row.prototype = utils.extend({}, PROTO.ENTITY, PROTO.CONTAINER, PROTO.IN_CONTAINER);
+PileDialog.Row.prototype = utils.extend({}, PROTOTYPES.ENTITY, PROTOTYPES.CONTAINER, PROTOTYPES.IN_CONTAINER);
 
 /****************************************/
 

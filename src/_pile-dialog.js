@@ -4,9 +4,9 @@ var TRANSITION_TIME = 300,
         PARA: 'PARAGRAPH',
         BUTTON: 'BUTTON',
         CHILD: 'CHILD',
+        ROW: 'ROW',
         OTHER: 'OTHER'
     };
-
 
 var style = document.createElement('STYLE');
 style.innerHTML = styleText;
@@ -73,7 +73,7 @@ var utils = {
     }
 };
 
-var PROTO = {
+var PROTOTYPES = {
     ENTITY: {
         'dialogType': TYPES.CHILD,
         'setAttr': function (attr, value) {
@@ -154,7 +154,10 @@ var PROTO = {
                 index = _index | 0,
                 children = self.children,
                 dialog = self instanceof PileDialog ? self : self.dialog;
-            // Todo: 添加前，先从原有 parent 和 Dialog 中移除
+            // 添加前，先从原有 parent 和 Dialog 中移除
+            if (child.parent) {
+                child.parent.remove(child);
+            }
             child.parent = self;
             child.dialog = dialog;
             children.splice(index, 0, child);
@@ -169,7 +172,10 @@ var PROTO = {
             var self = this,
                 children = self.children,
                 dialog = self instanceof PileDialog ? self : self.dialog;
-            // Todo: 添加前，先从原有 parent 和 Dialog 中移除
+            // 添加前，先从原有 parent 和 Dialog 中移除
+            if (child.parent) {
+                child.parent.remove(child);
+            }
             child.parent = self;
             child.dialog = dialog;
             children.push(child);
@@ -203,7 +209,7 @@ var PROTO = {
                 // 寻找的是 按键（尝试识别为 Dialog.Button 对象）
                 children.forEach(function (_child) {
                     var match = (_child.opt === thing || (_child.text === thing.text && _child.click === thing.click));
-                    if (_child.dialogType === TYPES.PARA && match) {
+                    if (_child.dialogType === TYPES.BUTTON && match) {
                         child = _child;
                     }
                 });
@@ -211,7 +217,7 @@ var PROTO = {
                 // 寻找的是 DOM（尝试识别为 Dialog.Child 对象）
                 children.forEach(function (_child) {
                     var match = (_child.dom === thing);
-                    if (_child.dialogType === TYPES.PARA && match) {
+                    if (_child.dialogType === TYPES.CHILD && match) {
                         child = _child;
                     }
                 });
@@ -335,6 +341,10 @@ var PileDialog = function (opt) {
     onClose && self.on('close', onClose);
 };
 
+
+/****************************************/
+
+PileDialog.TYPES = TYPES;
 PileDialog.topZIndex = 1000000;
 
 PileDialog.prototype = utils.extend({
@@ -426,11 +436,7 @@ PileDialog.prototype = utils.extend({
             }
         }
     }
-}, PROTO.ENTITY, PROTO.CONTAINER);
-
-/****************************************/
-
-PileDialog.TYPE = TYPES;
+}, PROTOTYPES.ENTITY, PROTOTYPES.CONTAINER);
 
 /****************************************/
 
@@ -443,7 +449,9 @@ PileDialog.Child = function (opt) {
     self.dom = opt.dom;
 };
 
-PileDialog.Child.prototype = utils.extend({}, PROTO.ENTITY, PROTO.IN_CONTAINER);
+PileDialog.Child.prototype = utils.extend({
+    dialogType: TYPES.CHILD
+}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
 
 /****************************************/
 
@@ -464,12 +472,12 @@ PileDialog.Para = function (opt) {
     self.dom.innerHTML = text;
 
     self.setStyle(style);
-
-    self.dialogType = TYPES.PARA;
 };
 
 
-PileDialog.Para.prototype = utils.extend({}, PROTO.ENTITY, PROTO.IN_CONTAINER);
+PileDialog.Para.prototype = utils.extend({
+    dialogType: TYPES.PARA
+}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
 
 /****************************************/
 
@@ -497,11 +505,11 @@ PileDialog.Button = function (opt) {
     });
 
     self.setStyle(style);
-
-    self.dialogType = TYPES.PARA;
 };
 
-PileDialog.Button.prototype = utils.extend({}, PROTO.ENTITY, PROTO.IN_CONTAINER);
+PileDialog.Button.prototype = utils.extend({
+    dialogType: TYPES.BUTTON
+}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
 
 /****************************************/
 
@@ -518,11 +526,14 @@ PileDialog.Row = function (opt) {
     self.items = items;
 
     self.dom = document.createElement('DIV');
+    self.dom.className = className;
 
-    // Todo: 继续完善
+    self.setStyle(style);
 };
 
-PileDialog.Row.prototype = utils.extend({}, PROTO.ENTITY, PROTO.CONTAINER, PROTO.IN_CONTAINER);
+PileDialog.Row.prototype = utils.extend({
+    dialogType: TYPES.ROW
+}, PROTOTYPES.ENTITY, PROTOTYPES.CONTAINER, PROTOTYPES.IN_CONTAINER);
 
 /****************************************/
 
