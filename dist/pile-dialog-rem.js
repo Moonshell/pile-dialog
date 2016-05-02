@@ -1,7 +1,7 @@
 /**
  * Pile Dialog
  *
- * Ver 0.2.5
+ * Ver 0.3.3
  * Date 2016/4/21
  *
  * Created by krimeshu on 2016/1/13.
@@ -19,9 +19,9 @@
         PARA: 'PARAGRAPH',
         BUTTON: 'BUTTON',
         CHILD: 'CHILD',
+        ROW: 'ROW',
         OTHER: 'OTHER'
     };
-
 
 var style = document.createElement('STYLE');
 style.innerHTML = styleText;
@@ -169,7 +169,10 @@ var PROTOTYPES = {
                 index = _index | 0,
                 children = self.children,
                 dialog = self instanceof PileDialog ? self : self.dialog;
-            // Todo: 添加前，先从原有 parent 和 Dialog 中移除
+            // 添加前，先从原有 parent 和 Dialog 中移除
+            if (child.parent) {
+                child.parent.remove(child);
+            }
             child.parent = self;
             child.dialog = dialog;
             children.splice(index, 0, child);
@@ -184,7 +187,10 @@ var PROTOTYPES = {
             var self = this,
                 children = self.children,
                 dialog = self instanceof PileDialog ? self : self.dialog;
-            // Todo: 添加前，先从原有 parent 和 Dialog 中移除
+            // 添加前，先从原有 parent 和 Dialog 中移除
+            if (child.parent) {
+                child.parent.remove(child);
+            }
             child.parent = self;
             child.dialog = dialog;
             children.push(child);
@@ -218,7 +224,7 @@ var PROTOTYPES = {
                 // 寻找的是 按键（尝试识别为 Dialog.Button 对象）
                 children.forEach(function (_child) {
                     var match = (_child.opt === thing || (_child.text === thing.text && _child.click === thing.click));
-                    if (_child.dialogType === TYPES.PARA && match) {
+                    if (_child.dialogType === TYPES.BUTTON && match) {
                         child = _child;
                     }
                 });
@@ -226,7 +232,7 @@ var PROTOTYPES = {
                 // 寻找的是 DOM（尝试识别为 Dialog.Child 对象）
                 children.forEach(function (_child) {
                     var match = (_child.dom === thing);
-                    if (_child.dialogType === TYPES.PARA && match) {
+                    if (_child.dialogType === TYPES.CHILD && match) {
                         child = _child;
                     }
                 });
@@ -350,7 +356,10 @@ var PileDialog = function (opt) {
     onClose && self.on('close', onClose);
 };
 
-PileDialog.PROTOTYPES = PROTOTYPES;
+
+/****************************************/
+
+PileDialog.TYPES = TYPES;
 PileDialog.topZIndex = 1000000;
 
 PileDialog.prototype = utils.extend({
@@ -446,10 +455,6 @@ PileDialog.prototype = utils.extend({
 
 /****************************************/
 
-PileDialog.TYPE = TYPES;
-
-/****************************************/
-
 PileDialog.Child = function (opt) {
     var self = this;
     if (!self instanceof PileDialog.Child) {
@@ -459,7 +464,9 @@ PileDialog.Child = function (opt) {
     self.dom = opt.dom;
 };
 
-PileDialog.Child.prototype = utils.extend({}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
+PileDialog.Child.prototype = utils.extend({
+    dialogType: TYPES.CHILD
+}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
 
 /****************************************/
 
@@ -483,7 +490,9 @@ PileDialog.Para = function (opt) {
 };
 
 
-PileDialog.Para.prototype = utils.extend({}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
+PileDialog.Para.prototype = utils.extend({
+    dialogType: TYPES.PARA
+}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
 
 /****************************************/
 
@@ -513,7 +522,9 @@ PileDialog.Button = function (opt) {
     self.setStyle(style);
 };
 
-PileDialog.Button.prototype = utils.extend({}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
+PileDialog.Button.prototype = utils.extend({
+    dialogType: TYPES.BUTTON
+}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
 
 /****************************************/
 
@@ -535,7 +546,9 @@ PileDialog.Row = function (opt) {
     self.setStyle(style);
 };
 
-PileDialog.Row.prototype = utils.extend({}, PROTOTYPES.ENTITY, PROTOTYPES.CONTAINER, PROTOTYPES.IN_CONTAINER);
+PileDialog.Row.prototype = utils.extend({
+    dialogType: TYPES.ROW
+}, PROTOTYPES.ENTITY, PROTOTYPES.CONTAINER, PROTOTYPES.IN_CONTAINER);
 
 /****************************************/
 
