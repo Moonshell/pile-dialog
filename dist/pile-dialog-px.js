@@ -469,7 +469,7 @@ PileDialog.Para = function (opt) {
 
     var text = opt.text || '',
         style = opt.style || {},
-        className = opt.className || 'dialog-btn';
+        className = opt.className || 'dialog-para';
 
     self.text = opt.text;
 
