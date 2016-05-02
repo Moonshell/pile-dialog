@@ -12,7 +12,7 @@
 <button onclick="dialog.open();">Open the dialog.</button>
 
 <script src="pile-dialog-rem.js"></script>
-<!-- If your page has already set a different font size of html tag, use "pile-dialog-px.js" instead. -->
+<!-- If your page has already set a different font size of html tag, use 'pile-dialog-px.js' instead. -->
 <script>
     var dialog = new PileDialog({
         prop: {
@@ -37,22 +37,23 @@
                 }
             },
             {
-                text: 'Do not close dialog',
-                click: function () {
-                    PileDialog.toast('OK, got it');
-                }
-            },
-            {
                 text: 'Remove button above this',
                 click: function () {
-                    this.dialog.remove(3);
+                    this.dialog.remove(this.getPrev());
                     this.setAttr('disabled', 'disabled');
                 }
             },
             {
                 text: 'Remove this button',
                 click: function () {
-                    this.dialog.remove(-2);
+                    this.dialog.remove(this);
+                    PileDialog.alert('Button removed.');
+                }
+            },
+            {
+                text: 'Remove the last button',
+                click: function () {
+                    this.dialog.remove(-1);
                     PileDialog.alert('Button removed.');
                 }
             },
@@ -74,4 +75,4 @@
     dialog.open();
 </script>
 </body>
-</html>
+</html>;

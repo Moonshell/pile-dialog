@@ -1,5 +1,5 @@
 var TRANSITION_TIME = 300,
-    TYPE = {
+    TYPES = {
         DIALOG: 'DIALOG',
         PARA: 'PARAGRAPH',
         BUTTON: 'BUTTON',
@@ -12,17 +12,273 @@ var style = document.createElement('STYLE');
 style.innerHTML = styleText;
 document.body.appendChild(style);
 
-var extend = function (extProto, baseProto) {
-    var undefined = void(0);
-    for (var p in baseProto) {
-        if (baseProto.hasOwnProperty(p) && extProto[p] === undefined) {
-            extProto[p] = baseProto[p];
+var utils = {
+    NODE_TYPES: {
+        ELEMENT_NODE: 1,
+        ATTRIBUTE_NODE: 2,
+        TEXT_NODE: 3,
+        CDATA_SECTION_NODE: 4,
+        ENTITY_REFERENCE_NODE: 5,
+        ENTITY_NODE: 6,
+        PROCESSING_INSTRUCTION_NODE: 7,
+        COMMENT_NODE: 8,
+        DOCUMENT_NODE: 9,
+        DOCUMENT_TYPE_NODE: 10,
+        DOCUMENT_FRAGMENT_NODE: 11,
+        NOTATION_NODE: 12
+    },
+    extend: function (extPrototype, basePrototype) {
+        var undefined = void(0),
+            basePrototypes = Array.prototype.slice.call(arguments, 1);
+        while (basePrototype = basePrototypes.shift()) {
+            for (var p in basePrototype) {
+                if (basePrototype.hasOwnProperty(p) && extPrototype[p] === undefined) {
+                    extPrototype[p] = basePrototype[p];
+                }
+            }
+        }
+        return extPrototype;
+    },
+    isArray: function (tar) {
+        return Object.prototype.toString.call(tar) === '[object Array]'
+    },
+    getChildElem: function (dom, index) {
+        var childNodes = dom.childNodes,
+            TYPES = this.NODE_TYPES,
+            _pos = 0, _index = 0, node;
+        while (node = childNodes[_pos++]) {
+            if (node.nodeType === TYPES.ELEMENT_NODE) {
+                if (index !== _index) {
+                    _index++;
+                    continue;
+                }
+                break;
+            }
+        }
+        return node;
+    },
+    getPrevElem: function (dom) {
+        do {
+            dom = dom.previousSibling;
+        }
+        while (dom && dom.nodeType !== 1);
+        return dom;
+    },
+    getNextElem: function (dom) {
+        do {
+            dom = dom.nextSibling;
+        }
+        while (dom && dom.nodeType !== 1);
+        return dom;
+    }
+};
+
+var PROTO = {
+    ENTITY: {
+        'dialogType': TYPES.CHILD,
+        'setAttr': function (attr, value) {
+            var self = this;
+            self.dom.setAttribute(attr, value);
+        },
+        'removeAttr': function (attr) {
+            var self = this;
+            self.dom.removeAttribute(attr);
+        },
+        'setText': function (text) {
+            var self = this;
+            self.dom.innerHTML = text;
+        },
+        'setStyle': function (style) {
+            var self = this,
+                dom = self.dom;
+            for (var name in style) {
+                if (!style.hasOwnProperty(name)) {
+                    continue;
+                }
+                dom.style[name] = style[name];
+            }
+        },
+        'show': function () {
+            var self = this;
+            self.dom.style.display = 'block';
+        },
+        'hide': function () {
+            var self = this;
+            self.dom.style.display = 'none';
+        }
+    },
+    CONTAINER: {
+        'prepend': function (thing, _index) {
+            var self = this,
+                child = self._recognize(thing);
+            self._prepend(child, _index);
+        },
+        'append': function (thing) {
+            var self = this,
+                child = self._recognize(thing);
+            self._append(child);
+        },
+        '_recognize': function (thing) {
+            var type = Object.prototype.toString.apply(thing),
+                child = null;
+            if (thing.dialogType) {
+                // 追加 Dialog.Child 对象
+                child = thing;
+            } else if (type === '[object String]') {
+                // 追加 字符串（自动转为 Dialog.Para 对象）
+                child = new PileDialog.Para({
+                    text: thing
+                });
+            } else if (type === '[object Object]' &&
+                typeof thing.text === 'string' &&
+                typeof thing.click === 'function') {
+                // 追加 按键（自动转为 Dialog.Button 对象）
+                child = new PileDialog.Button({
+                    text: thing.text,
+                    click: thing.click
+                });
+            } else if (/\[object HTML.*?Element]/i.test(type)) {
+                // 追加 DOM（自动转为 Dialog.Child 对象）
+                child = new PileDialog.Child({
+                    dom: thing
+                });
+            }
+            if (!child) {
+                // 无法识别，放弃
+                return null;
+            }
+            return child;
+        },
+        '_prepend': function (child, _index) {
+            var self = this,
+                index = _index | 0,
+                children = self.children,
+                dialog = self instanceof PileDialog ? self : self.dialog;
+            // Todo: 添加前，先从原有 parent 和 Dialog 中移除
+            child.parent = self;
+            child.dialog = dialog;
+            children.splice(index, 0, child);
+            var nextNode = utils.getChildElem(self.dom, index);
+            if (nextNode) {
+                self.dom.insertBefore(child.dom, nextNode);
+            } else {
+                self.dom.appendChild(child.dom);
+            }
+        },
+        '_append': function (child) {
+            var self = this,
+                children = self.children,
+                dialog = self instanceof PileDialog ? self : self.dialog;
+            // Todo: 添加前，先从原有 parent 和 Dialog 中移除
+            child.parent = self;
+            child.dialog = dialog;
+            children.push(child);
+            self.dom.appendChild(child.dom);
+        },
+        'find': function (thing) {
+            var self = this,
+                children = self.children,
+                type = Object.prototype.toString.apply(thing),
+                child = null;
+            if (thing.dialogType && children.indexOf(thing) >= 0) {
+                // 寻找的是 Dialog.Child 对象
+                child = thing;
+            } else if (type === '[object Number]') {
+                // 寻找的是 Dialog.Child 对象序号
+                if (thing < 0) {
+                    thing = children.length + thing;
+                }
+                child = children[thing];
+            } else if (type === '[object String]') {
+                // 寻找的是 字符串（尝试识别为 Dialog.Para 对象）
+                children.forEach(function (_child) {
+                    var match = (_child.text === thing);
+                    if (_child.dialogType === TYPES.PARA && match) {
+                        child = _child;
+                    }
+                });
+            } else if (type === '[object Object]' &&
+                typeof thing.text === 'string' &&
+                typeof thing.click === 'function') {
+                // 寻找的是 按键（尝试识别为 Dialog.Button 对象）
+                children.forEach(function (_child) {
+                    var match = (_child.opt === thing || (_child.text === thing.text && _child.click === thing.click));
+                    if (_child.dialogType === TYPES.PARA && match) {
+                        child = _child;
+                    }
+                });
+            } else if (/\[object HTML.*?Element]/i.test(type)) {
+                // 寻找的是 DOM（尝试识别为 Dialog.Child 对象）
+                children.forEach(function (_child) {
+                    var match = (_child.dom === thing);
+                    if (_child.dialogType === TYPES.PARA && match) {
+                        child = _child;
+                    }
+                });
+            }
+            return child;
+        },
+        'remove': function (thing) {
+            var self = this,
+                child = self.find(thing);
+            if (!child) {
+                // 无法识别，放弃
+                return;
+            }
+            this._remove(child);
+        },
+        '_remove': function (child) {
+            var self = this,
+                children = self.children;
+            delete child.parent;
+            delete child.dialog;
+            children.splice(children.indexOf(child), 1);
+            self.dom.removeChild(child.dom);
+        },
+        'clear': function () {
+            var self = this,
+                children = self.children,
+                len = children.length;
+            for (var i = 0, child; (i < len) && (child = children[i]); i++) {
+                delete child.parent;
+                delete child.dialog;
+            }
+            self.children = [];
+            self.dom.innerHTML = '';
+        },
+        'setContent': function (content) {
+            var self = this,
+                arr = content.length === undefined ? [content] : content;
+
+            self.clear();
+            for (var i = 0, len = arr.length; i < len; i++) {
+                self.append(content[i]);
+            }
+        }
+    },
+    IN_CONTAINER: {
+        'getPrev': function () {
+            var self = this,
+                parent = self && self.parent,
+                children = parent && parent.children,
+                pos = children && children.indexOf(self);
+            return pos >= 0 && parent && parent.find && parent.find(pos - 1);
+        },
+        'getNext': function () {
+            var self = this,
+                parent = self && self.parent,
+                children = parent && parent.children,
+                pos = children && children.indexOf(self);
+            return pos >= 0 && parent && parent.find && parent.find(pos + 1);
         }
     }
 };
 
 var PileDialog = function (opt) {
     var self = this;
+    if (!self instanceof PileDialog) {
+        return new PileDialog(opt);
+    }
 
     var prop = opt.prop || {
                 skin: 'default',
@@ -62,6 +318,9 @@ var PileDialog = function (opt) {
         self.close();
     });
 
+    // 内容部分的DOM作为默认DOM
+    self.dom = self.doms.content;
+
     document.body.appendChild(wrap);
 
     self.setProp('skin', String(prop.skin || 'default'));
@@ -78,8 +337,8 @@ var PileDialog = function (opt) {
 
 PileDialog.topZIndex = 1000000;
 
-PileDialog.prototype = {
-    dialogType: TYPE.DIALOG,
+PileDialog.prototype = utils.extend({
+    dialogType: TYPES.DIALOG,
     'setTitle': function (title) {
         this.title = title;
         this.doms.title.innerHTML = title;
@@ -107,144 +366,6 @@ PileDialog.prototype = {
             case 'lock':
                 self.isLocked = value;
                 break;
-        }
-    },
-    'prepend': function (thing, _index) {
-        var self = this,
-            child = self._recognize(thing);
-        self._prepend(child, _index);
-    },
-    'append': function (thing) {
-        var self = this,
-            child = self._recognize(thing);
-        self._append(child);
-    },
-    '_recognize': function (thing) {
-        var type = Object.prototype.toString.apply(thing),
-            child = null;
-        if (thing.dialogType && !thing.dialog) {
-            // 追加 Dialog.Child 对象
-            child = thing;
-        } else if (type === '[object String]') {
-            // 追加 字符串（自动转为 Dialog.Para 对象）
-            child = new PileDialog.Para({
-                text: thing
-            });
-        } else if (type === '[object Object]' &&
-            typeof thing.text === 'string' &&
-            typeof thing.click === 'function') {
-            // 追加 按键（自动转为 Dialog.Button 对象）
-            child = new PileDialog.Button({
-                text: thing.text,
-                click: thing.click
-            });
-        } else if (/\[object HTML.*?Element]/i.test(type)) {
-            // 追加 DOM（自动转为 Dialog.Child 对象）
-            child = new PileDialog.Child({
-                dom: thing
-            });
-        }
-        if (!child) {
-            // 无法识别，放弃
-            return null;
-        }
-        return child;
-    },
-    '_prepend': function (child, _index) {
-        var self = this,
-            index = _index | 0,
-            children = self.children;
-        child.dialog = self;
-        children.splice(index, 0, child);
-        var nextNode = self.doms.content.childNodes[index];
-        if (nextNode) {
-            self.doms.content.insertBefore(child.dom, nextNode);
-        } else {
-            self.doms.content.appendChild(child.dom);
-        }
-    },
-    '_append': function (child) {
-        var self = this,
-            children = self.children;
-        child.dialog = self;
-        children.push(child);
-        self.doms.content.appendChild(child.dom);
-    },
-    'find': function (thing) {
-        var self = this,
-            children = self.children,
-            type = Object.prototype.toString.apply(thing),
-            child = null;
-        if (thing.dialogType && children.indexOf(thing) >= 0) {
-            // 寻找的是 Dialog.Child 对象
-            child = thing;
-        } else if (type === '[object Number]') {
-            // 寻找的是 Dialog.Child 对象序号
-            if (thing < 0) {
-                thing = children.length + thing;
-            }
-            child = children[thing];
-        } else if (type === '[object String]') {
-            // 寻找的是 字符串（尝试识别为 Dialog.Para 对象）
-            children.forEach(function (_child) {
-                var match = (_child.text === thing);
-                if (_child.dialogType === TYPE.PARA && match) {
-                    child = _child;
-                }
-            });
-        } else if (type === '[object Object]' &&
-            typeof thing.text === 'string' &&
-            typeof thing.click === 'function') {
-            // 寻找的是 按键（尝试识别为 Dialog.Button 对象）
-            children.forEach(function (_child) {
-                var match = (_child.opt === thing || (_child.text === thing.text && _child.click === thing.click));
-                if (_child.dialogType === TYPE.PARA && match) {
-                    child = _child;
-                }
-            });
-        } else if (/\[object HTML.*?Element]/i.test(type)) {
-            // 寻找的是 DOM（尝试识别为 Dialog.Child 对象）
-            children.forEach(function (_child) {
-                var match = (_child.dom === thing);
-                if (_child.dialogType === TYPE.PARA && match) {
-                    child = _child;
-                }
-            });
-        }
-        return child;
-    },
-    'remove': function (thing) {
-        var self = this,
-            child = self.find(thing);
-        if (!child) {
-            // 无法识别，放弃
-            return;
-        }
-        this._remove(child);
-    },
-    '_remove': function (child) {
-        var self = this,
-            children = self.children;
-        delete child.dialog;
-        children.splice(children.indexOf(child), 1);
-        self.doms.content.removeChild(child.dom);
-    },
-    'clear': function () {
-        var self = this,
-            children = self.children;
-        for (var i = 0, len = children.length; i < len; i++) {
-            delete children[i].dialog;
-        }
-        self.children = [];
-        self.doms.content.innerHTML = '';
-    },
-    'setContent': function (content) {
-        var self = this,
-            arr = content.length === undefined ? [content] : content;
-
-        self.clear();
-        for (var i = 0, len = arr.length; i < len; i++) {
-            self.append(content[i]);
         }
     },
     'open': function (e) {
@@ -286,13 +407,10 @@ PileDialog.prototype = {
         self.doms.cover.classList.remove('show');
         self.doms.box.classList.remove('show');
     },
-    '_isArray': function (tar) {
-        return Object.prototype.toString.call(tar) === '[object Array]'
-    },
     'on': function (type, callback) {
         var self = this,
             typeCallbacks = self.callbacks[type];
-        if (!self._isArray(typeCallbacks)) {
+        if (!utils.isArray(typeCallbacks)) {
             this.callbacks[type] = typeCallbacks = [];
         }
         typeCallbacks.push(callback);
@@ -308,60 +426,32 @@ PileDialog.prototype = {
             }
         }
     }
-};
+}, PROTO.ENTITY, PROTO.CONTAINER);
 
 /****************************************/
 
-PileDialog.TYPE = TYPE;
-
-PileDialog.CHILD_PROTO = {
-    'dialogType': TYPE.CHILD,
-    'setAttr': function (attr, value) {
-        var self = this;
-        self.dom.setAttribute(attr, value);
-    },
-    'removeAttr': function (attr) {
-        var self = this;
-        self.dom.removeAttribute(attr);
-    },
-    'setText': function (text) {
-        var self = this;
-        self.dom.innerHTML = text;
-    },
-    'setStyle': function (style) {
-        var self = this,
-            dom = self.dom;
-        for (var name in style) {
-            if (!style.hasOwnProperty(name)) {
-                continue;
-            }
-            dom.style[name] = style[name];
-        }
-    },
-    'show': function () {
-        var self = this;
-        self.dom.style.display = 'block';
-    },
-    'hide': function () {
-        var self = this;
-        self.dom.style.display = 'none';
-    }
-};
+PileDialog.TYPE = TYPES;
 
 /****************************************/
 
 PileDialog.Child = function (opt) {
     var self = this;
+    if (!self instanceof PileDialog.Child) {
+        return new PileDialog.Child(opt);
+    }
 
     self.dom = opt.dom;
 };
 
-PileDialog.Child.prototype = PileDialog.CHILD_PROTO;
+PileDialog.Child.prototype = utils.extend({}, PROTO.ENTITY, PROTO.IN_CONTAINER);
 
 /****************************************/
 
 PileDialog.Para = function (opt) {
     var self = this;
+    if (!self instanceof PileDialog.Child) {
+        return new PileDialog.Child(opt);
+    }
 
     var text = opt.text || '',
         style = opt.style || {},
@@ -375,15 +465,19 @@ PileDialog.Para = function (opt) {
 
     self.setStyle(style);
 
-    self.dialogType = TYPE.PARA;
+    self.dialogType = TYPES.PARA;
 };
 
-PileDialog.Para.prototype = PileDialog.CHILD_PROTO;
+
+PileDialog.Para.prototype = utils.extend({}, PROTO.ENTITY, PROTO.IN_CONTAINER);
 
 /****************************************/
 
 PileDialog.Button = function (opt) {
     var self = this;
+    if (!self instanceof PileDialog.Child) {
+        return new PileDialog.Child(opt);
+    }
 
     var text = opt.text || '',
         style = opt.style || {},
@@ -404,31 +498,31 @@ PileDialog.Button = function (opt) {
 
     self.setStyle(style);
 
-    self.dialogType = TYPE.PARA;
+    self.dialogType = TYPES.PARA;
 };
 
-PileDialog.Button.prototype = PileDialog.CHILD_PROTO;
+PileDialog.Button.prototype = utils.extend({}, PROTO.ENTITY, PROTO.IN_CONTAINER);
 
 /****************************************/
 
-PileDialog.ButtonRow = function (opt) {
+PileDialog.Row = function (opt) {
     var self = this;
+    if (!self instanceof PileDialog.Row) {
+        return new PileDialog.Row(opt);
+    }
 
     var items = opt.items || [],
-        className = opt.className || 'dialog-btn-row';
+        className = opt.className || 'dialog-row';
 
     self.opt = opt;
     self.items = items;
 
     self.dom = document.createElement('DIV');
 
+    // Todo: 继续完善
 };
 
-PileDialog.ButtonRow = extend({
-    append: function () {
-
-    }
-}, PileDialog.CHILD_PROTO);
+PileDialog.Row.prototype = utils.extend({}, PROTO.ENTITY, PROTO.CONTAINER, PROTO.IN_CONTAINER);
 
 /****************************************/
 
@@ -505,7 +599,7 @@ PileDialog.createDefaultDialogs = function () {
             {
                 text: '确定',
                 click: function () {
-                    var dialog = this.dialog;
+                    var dialog = this.parent;
                     dialog._resolved = true;
                     dialog.close();
                 }
@@ -521,7 +615,7 @@ PileDialog.createDefaultDialogs = function () {
         var dialog = PileDialog.alertDialog,
             btnOk = dialog.find(-1),
             promise = new Promise();
-        if (!dialog._isArray(contents)) {
+        if (!utils.isArray(contents)) {
             contents = [contents];
         }
         dialog.remove(btnOk);

@@ -11,8 +11,8 @@
 <h1>Let's test it here.</h1>
 <button onclick="dialog.open();">Open the dialog.</button>
 
-<script src="pile-dialog-px.js"></script>
-<!-- If your page has not set a different font size of html tag, use the 'pile-dialog-rem.js' instead. -->
+<script src="#dialog_script#"></script>
+<!-- #dialog_script_desc# -->
 <script>
     var dialog = new PileDialog({
         prop: {
@@ -75,4 +75,4 @@
     dialog.open();
 </script>
 </body>
-</html>;
+</html>
