@@ -252,5 +252,7 @@ body {
     display: block;
     text-align: center;
     cursor: pointer; }
+  .dialog-box .dialog-row {
+    display: flex; }
 
 /* fragEnd: without-set-rem */

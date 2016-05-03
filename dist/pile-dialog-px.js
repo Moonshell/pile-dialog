@@ -1,7 +1,7 @@
 /**
  * Pile Dialog
  *
- * Ver 0.5.4
+ * Ver 0.5.5
  * Date 2016/4/21
  *
  * Created by krimeshu on 2016/1/13.
@@ -113,7 +113,7 @@ var PileDialog = function (opt) {
     self.doms.closeBtn = wrap.getElementsByClassName('dialog-close-btn')[0];
     self.doms.content = wrap.getElementsByClassName('dialog-content')[0];
 
-    self.doms.cover.addEventListener('touchmove', function (e) {
+    self.doms.wrap.addEventListener('touchmove', function (e) {
         e.preventDefault();
     });
     self.doms.cover.addEventListener('click', function () {
