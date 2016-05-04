@@ -1,6 +1,6 @@
 {
   "name": "pile-dialog",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "watchToRebuilding": false,
   "fcOpt": {
     "scOpt": {
@@ -9,7 +9,7 @@
       "outputDir": "images"
     },
     "pcOpt": {
-      "browsers": "Android > 2.3, iOS > 6.0"
+      "browsers": "Android > 2.3, iOS > 6.0, ie_mob >=  10"
     },
     "alOpt": {
       "allot": false
