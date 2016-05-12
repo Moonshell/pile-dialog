@@ -12,7 +12,8 @@ Promise.prototype = {
     },
     'complete': function (type, result) {
         while (this.callbacks[0]) {
-            this.callbacks.shift()[type](result);
+            var callback = this.callbacks.shift()[type];
+            typeof(callback) === 'function' && callback(result);
         }
     },
     'then': function (successHandler, failedHandler) {

@@ -247,7 +247,8 @@ body {
     overflow: hidden;
     text-overflow: ellipsis; }
   .dialog-box .dialog-para {
-    display: block; }
+    display: block;
+    line-height: 1.4; }
   .dialog-box .dialog-btn {
     display: block;
     text-align: center;
