@@ -1,0 +1,83 @@
+// rem大小计算基准值
+$baseFontSize: 20px !default;
+$baseFontRatio: 2 !default;
+
+// root字体大小设为10px
+html {
+  font-size: $baseFontSize;
+}
+
+// 针对不同的设备，对页面rem做不同缩放
+html {
+  font-size: $baseFontSize*.5;
+
+  ///* For iPhone5 (设计图原尺寸：640)*/
+  //@media screen and (min-width: 320px) {
+  //  font-size: $baseFontSize;
+  //}
+  //@media screen and (min-width: 360px) {
+  //  font-size: $baseFontSize * 1.125;
+  //}
+  //@media screen and (min-width: 375px) {
+  //  font-size: $baseFontSize * 1.171;
+  //}
+  //@media screen and (min-width: 414px) {
+  //  font-size: $baseFontSize * 1.293;
+  //}
+
+  /* For iPhone6 (设计图原尺寸：750)*/
+  @media screen and (min-width: 320px) {
+    font-size: $baseFontSize * .85;
+  }
+  @media screen and (min-width: 360px) {
+    font-size: $baseFontSize * .96;
+  }
+  @media screen and (min-width: 375px) {
+    font-size: $baseFontSize;
+  }
+  @media screen and (min-width: 414px) {
+    font-size: $baseFontSize * 1.1;
+  }
+
+  ///* For Android (设计图原尺寸：720)*/
+  //@media screen and (min-width: 320px) {
+  //  font-size: $baseFontSize * .88;
+  //}
+  //@media screen and (min-width: 360px) {
+  //  font-size: $baseFontSize;
+  //}
+  //@media screen and (min-width: 375px) {
+  //  font-size: $baseFontSize * 1.04;
+  //}
+  //@media screen and (min-width: 414px) {
+  //  font-size: $baseFontSize * 1.15;
+  //}
+}
+
+// body中重置为14px，确保没写font-size的元素，字体大小较为正常
+body {
+  font-size: $baseFontSize*0.7;
+}
+
+// px换算成rem值，可多参数、带单位
+@function px2rem($sizes) {
+  $result: '';
+
+  @each $size in $sizes {
+    $rem: $size;
+    @if $result != '' {
+      $result: $result + ' ';
+    }
+
+    @if type_of($size) == number {
+      $size: ($size / $baseFontSize / $baseFontRatio);
+      $sizeWithOutUnit: $size / ($size * 0 + 1);
+      $rem: $sizeWithOutUnit + rem;
+    }
+
+    $result: $result + $rem;
+  }
+
+  //$result : $result + ' ' + '/*#{$sizes}*/';
+  @return unquote($result);
+}

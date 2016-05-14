@@ -8,7 +8,7 @@
  */
 (function () {
     var templateText = '#include("inc/_template.html", {"_inlineString": true})',
-        styleText = '#include("css/dialog-px.css", {"_inlineString": true})';
+        styleText = '#include("css/dialog-rem.css", {"_inlineString": true})';
 
     /****************************************/
 

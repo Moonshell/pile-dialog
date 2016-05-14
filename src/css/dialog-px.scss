@@ -1,20 +1,20 @@
-@import "common_function";
-
 // px版不转成rem单位
 @function px2rem($sizes) {
   $result: '';
 
   @each $size in $sizes {
-    $rem: $size;
+    $px: $size;
     @if $result != '' {
       $result: $result + ' ';
     }
 
     @if type_of($size) == number {
-      $rem: (stripUnits($size / $baseFontRatio)) + px;
+      $size: ($size / $baseFontRatio);
+      $sizeWithOutUnit: $size / ($size * 0 + 1);
+      $px: $sizeWithOutUnit + px;
     }
 
-    $result: $result + $rem;
+    $result: $result + $px;
   }
 
   //$result : $result + ' ' + '/*#{$sizes}*/';

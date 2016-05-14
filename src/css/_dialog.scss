@@ -1,6 +1,9 @@
-$transition_time: 300ms;
+// rem大小计算基准值
+$baseFontSize: 20px !default;
+$baseFontRatio: 2 !default;
 
-/* fragBegin: without-set-rem */
+// 过渡动画时间
+$transition_time: 300ms;
 
 .pile-dialog-wrap {
   // 默认皮肤
@@ -21,7 +24,7 @@ $transition_time: 300ms;
         padding-right: px2rem(42px);
 
         border-radius: px2rem(8px 8px 0 0);
-        @include border1px(bottom, #DADADA);
+        border-bottom: 1px solid #DADADA;
         background-color: #FFFFFF;
 
         color: #333333;
@@ -157,7 +160,7 @@ $transition_time: 300ms;
         height: px2rem(120px);
         line-height: px2rem(120px);
 
-        @include border1px(top, #C5C5C5);
+        border-top: 1px solid #C5C5C5;
         background-color: #F5F5EE;
 
         color: #535252;
@@ -318,5 +321,3 @@ $transition_time: 300ms;
     display: flex;
   }
 }
-
-/* fragEnd: without-set-rem */
