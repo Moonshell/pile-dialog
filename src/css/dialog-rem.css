@@ -21,6 +21,7 @@ html {
 body {
   font-size: 14px; }
 
+/*! Pile Dialog Styles */
 .pile-dialog-wrap.default .dialog-box {
   border-radius: 0.2rem;
   background-color: #FFFFFF;
