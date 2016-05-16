@@ -40,7 +40,12 @@ module.exports = {
     CONTAINER: {
         'prepend': function (thing, _index) {
             var self = this,
-                child = self._recognize(thing);
+                child = dialogTypes.tryParse(thing);
+            if (!child) {
+                var err = new Error('无法转换为对话框相关类：');
+                err.target = thing;
+                throw err;
+            }
             self._prepend(child, _index);
         },
         'append': function (thing) {

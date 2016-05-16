@@ -195,7 +195,12 @@ module.exports = {
     CONTAINER: {
         'prepend': function (thing, _index) {
             var self = this,
-                child = self._recognize(thing);
+                child = dialogTypes.tryParse(thing);
+            if (!child) {
+                var err = new Error('无法转换为对话框相关类：');
+                err.target = thing;
+                throw err;
+            }
             self._prepend(child, _index);
         },
         'append': function (thing) {
@@ -900,7 +905,7 @@ initializer.lazyCreate('confirmDialog', 'confirm', function () {
 /**
  * Pile Dialog
  *
- * Ver 1.0.1
+ * Ver 1.0.2
  * Date 2016/5/17
  *
  * Created by krimeshu on 2016/1/13.
