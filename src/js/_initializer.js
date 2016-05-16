@@ -1,28 +1,72 @@
 var dialogUtils = require('./_dialog-utils.js'),
 
     Promise = require('./_dialog-promise.js'),
-    PileDialog = window.PileDialog || require('./_pile-dialog.js');
 
-var DefaultDialogs = module.exports = {
+    Dialog = require('./_dialog.js'),
+    DialogChild = require('./_dialog-child.js'),
+    DialogPara = require('./_dialog-para.js'),
+    DialogButton = require('./_dialog-button.js'),
+    DialogRow = require('./_dialog-row.js');
+
+window.PileDialog = Dialog;
+window.PileDialogChild = DialogChild;
+window.PileDialogPara = DialogPara;
+window.PileDialogButton = DialogButton;
+window.PileDialogRow = DialogRow;
+
+var initializer = module.exports = {
+    _initialized: false,
     _pageLoaded: false,
     _creators: [],
-    startCreate: function () {
-        var self = this;
-        if (document.addEventListener) {
-            document.addEventListener('DOMContentLoaded', function () {
-                self._onLoad();
-            });
-        } else if (window.addEventListener) {
-            window.addEventListener('load', function () {
-                self._onLoad();
-            });
-        } else if (window.attachEvent) {
-            window.attachEvent('onload', function () {
-                self._onLoad();
+    init: function (opts) {
+        var self = this,
+            initialized = self._initialized,
+            pageLoaded = self._pageLoaded,
+            transitionTime = opts['transitionTime'] || 300,
+            dialogWrapClassName = opts['dialogWrapClassName'] || 'pile-dialog-wrap',
+            templateText = opts['templateText'] || '',
+            styleText = opts['styleText'] || '';
+
+        if (initialized) {
+            return;
+        }
+
+        Dialog.setOptions({
+            TRANSITION_TIME: transitionTime,
+            WRAP_CLASS_NAME: dialogWrapClassName,
+            TEMPLATE_TEXT: templateText
+        });
+        styleText && self._createStyle(styleText);
+
+        // Todo: 此处逻辑有误，请检查
+        if (pageLoaded) {
+            self.doCreate();
+        } else {
+            self._bindLoadEvent(function () {
+                self.doCreate();
             });
         }
     },
-    _onLoad: function () {
+    _createStyle: function (styleText) {
+        var style = document.createElement('STYLE');
+        style.innerHTML = styleText;
+        document.body.appendChild(style);
+    },
+    _bindLoadEvent: function (cb) {
+        var self = this,
+            onLoad = function () {
+                self._pageLoaded = true;
+                cb && cb();
+            };
+        if (document.addEventListener) {
+            document.addEventListener('DOMContentLoaded', onLoad);
+        } else if (window.addEventListener) {
+            window.addEventListener('load', onLoad);
+        } else if (window.attachEvent) {
+            window.attachEvent('onload', onLoad);
+        }
+    },
+    doCreate: function () {
         this._pageLoaded = true;
 
         var creators = this._creators;
@@ -30,7 +74,7 @@ var DefaultDialogs = module.exports = {
             creator();
         });
     },
-    waitFor: function (dialogName, funcName, creator) {
+    lazyCreate: function (dialogName, funcName, creator) {
         if (PileDialog[dialogName]) {
             console.error('PileDialog.%s 已存在。\n(PileDialog.%s already exists.)', dialogName, dialogName);
             return;
@@ -50,7 +94,7 @@ var DefaultDialogs = module.exports = {
     }
 };
 
-DefaultDialogs.waitFor('toastDialog', 'toast', function () {
+initializer.lazyCreate('toastDialog', 'toast', function () {
     PileDialog.toastDialog = new PileDialog({
         prop: {
             skin: 'toast',
@@ -85,7 +129,7 @@ DefaultDialogs.waitFor('toastDialog', 'toast', function () {
     };
 });
 
-DefaultDialogs.waitFor('alertDialog', 'alert', function () {
+initializer.lazyCreate('alertDialog', 'alert', function () {
     PileDialog.alertDialog = new PileDialog({
         prop: {
             skin: 'default',
@@ -134,7 +178,7 @@ DefaultDialogs.waitFor('alertDialog', 'alert', function () {
     };
 });
 
-DefaultDialogs.waitFor('confirmDialog', 'confirm', function () {
+initializer.lazyCreate('confirmDialog', 'confirm', function () {
     PileDialog.confirmDialog = new PileDialog({
         prop: {
             skin: 'default',
@@ -143,7 +187,7 @@ DefaultDialogs.waitFor('confirmDialog', 'confirm', function () {
             lock: true
         },
         content: [
-            new PileDialog.Row({
+            new PileDialogRow({
                 content: [
                     {
                         text: '取消',

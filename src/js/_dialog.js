@@ -2,16 +2,16 @@ var dialogUtils = require('./_dialog-utils.js'),
     dialogTypes = require('./_dialog-types.js'),
     dialogPrototypes = require('./_dialog-prototypes.js'),
 
+    WRAP_CLASS_NAME = 'dialog-wrap',
     TRANSITION_TIME = 300,
-    TEMPLATE_TEXT = null,
-    STYLE_TEXT = null;
+    TEMPLATE_TEXT = null;
 
-module.exports = PileDialog;
+module.exports = Dialog;
 
-function PileDialog(opt) {
+function Dialog(opt) {
     var self = this;
-    if (!self instanceof PileDialog) {
-        return new PileDialog(opt);
+    if (!self instanceof Dialog) {
+        return new Dialog(opt);
     }
 
     var prop = opt.prop || {
@@ -32,7 +32,7 @@ function PileDialog(opt) {
     self.callbacks = {};
 
     var wrap = self.doms.wrap = document.createElement('DIV');
-    wrap.className = 'pile-dialog-wrap';
+    wrap.className = WRAP_CLASS_NAME;
     wrap.innerHTML = TEMPLATE_TEXT;
 
     self.doms.cover = wrap.getElementsByClassName('dialog-cover')[0];
@@ -72,24 +72,17 @@ function PileDialog(opt) {
 
 /****************************************/
 
-PileDialog.topZIndex = 1000000;
+Dialog.topZIndex = 1000000;
 
-PileDialog.setOptions = function (options) {
+Dialog.setOptions = function (options) {
     (options['TRANSITION_TIME']) && (TRANSITION_TIME = options['TRANSITION_TIME']);
+    (options['WRAP_CLASS_NAME']) && (WRAP_CLASS_NAME = options['WRAP_CLASS_NAME']);
     (options['TEMPLATE_TEXT']) && (TEMPLATE_TEXT = options['TEMPLATE_TEXT']);
-    (options['STYLE_TEXT']) && (STYLE_TEXT = options['STYLE_TEXT']);
-    this.createStyle();
-};
-
-PileDialog.createStyle = function () {
-    var style = document.createElement('STYLE');
-    style.innerHTML = STYLE_TEXT;
-    document.body.appendChild(style);
 };
 
 /****************************************/
 
-dialogTypes.register('DIALOG', PileDialog, [{
+dialogTypes.register('DIALOG', Dialog, [{
     'setTitle': function (title) {
         this.title = title;
         this.doms.title.innerHTML = title;
@@ -106,7 +99,7 @@ dialogTypes.register('DIALOG', PileDialog, [{
         prop[name] = value;
         switch (name) {
             case 'skin':
-                self.doms.wrap.className = 'pile-dialog-wrap ' + value;
+                self.doms.wrap.className = WRAP_CLASS_NAME + ' ' + value;
                 break;
             case 'cover':
                 self.doms.cover.style.display = value ? 'block' : 'none';
@@ -130,7 +123,7 @@ dialogTypes.register('DIALOG', PileDialog, [{
             self._waitingTimeout = null;
         }, TRANSITION_TIME);
 
-        var z = PileDialog.topZIndex += 10;
+        var z = Dialog.topZIndex += 10;
         self.doms.wrap.style.zIndex = z;
         self.doms.cover.style.zIndex = z + 1;
         self.doms.box.style.zIndex = z + 2;
