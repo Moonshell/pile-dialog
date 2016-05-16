@@ -15,7 +15,7 @@ module.exports = {
 
         prototypes = prototypes || [];
         prototypes.splice(0, 0, {dialogType: name});
-        constructor.prototype = dialogUtils.extend(prototypes);
+        constructor.prototype = dialogUtils.extend.apply(dialogUtils, prototypes);
     },
     getType: function (name) {
         return types[name];
@@ -23,6 +23,9 @@ module.exports = {
     // 尝试将参数转换成某种 对话框相关类
     tryParse: function (thing) {
         var typeObject;
+        if (thing.dialogType) {
+            return thing;
+        }
         for (var name in types) {
             if (!types.hasOwnProperty(name)) {
                 continue;

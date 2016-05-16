@@ -1,11 +1,11 @@
 var dialogUtils = require('./_dialog-utils.js'),
 
-    PileDialog = require('./_pile-dialog.js');
+    PileDialog = require('./_pile-dialog.js'),
+    Promise = require('./_dialog-promise.js');
 
 var DefaultDialogs = module.exports = {
     _pageLoaded: false,
-    _names: [],
-    _defined: {},
+    _creators: [],
     startCreate: function () {
         var self = this;
         if (document.addEventListener) {
@@ -26,22 +26,11 @@ var DefaultDialogs = module.exports = {
         this._pageLoaded = true;
 
         var creators = this._creators;
-        for (var name in creators) {
-            if (!creators.hasOwnProperty(name)) {
-                continue;
-            }
-            this.doCreate(name, creators[name]);
-        }
+        creators.forEach(function (creator) {
+            creator();
+        });
     },
-    define: function () {
-        for (var name in opts) {
-            if (!opts.hasOwnProperty(name)) {
-                continue;
-            }
-            this._creators[name] = opts[name];
-        }
-    },
-    waitFor: function (dialogName, funcName) {
+    waitFor: function (dialogName, funcName, creator) {
         if (PileDialog[dialogName]) {
             console.error('PileDialog.%s 已存在。\n(PileDialog.%s already exists.)', dialogName, dialogName);
             return;
@@ -57,49 +46,11 @@ var DefaultDialogs = module.exports = {
                 PileDialog[funcName].apply(PileDialog[dialogName], args);
             }, 50);
         };
+        this._creators.push(creator);
     }
 };
 
-DefaultDialogs.define(
-    'toastDialog', function () {
-        var dialog = new PileDialog({
-            prop: {
-                skin: 'toast',
-                cover: false,
-                closeBtn: false,
-                lock: false
-            },
-            content: [
-                ''
-            ]
-        });
-        dialog.hideTitle();
-        return dialog;
-    },
-    'toast', function (dialog) {
-        return function (msg, time, callback) {
-            dialog.find(0).setText(msg);
-            dialog.open();
-            if (dialog._closeTimeout) {
-                window.clearTimeout(dialog._closeTimeout);
-            }
-            if (arguments.length === 2 && typeof time === 'function') {
-                callback = time;
-                time = undefined;
-            }
-            time = time === undefined ? 2500 : time;
-            if (time) {
-                dialog._closeTimeout = window.setTimeout(function () {
-                    dialog.close();
-                    dialog._closeTimeout = null;
-                    callback && callback();
-                }, time);
-            }
-        };
-    }
-);
-
-var onLoad = function () {
+DefaultDialogs.waitFor('toastDialog', 'toast', function () {
     PileDialog.toastDialog = new PileDialog({
         prop: {
             skin: 'toast',
@@ -132,7 +83,9 @@ var onLoad = function () {
             }, time);
         }
     };
-    // ----------
+});
+
+DefaultDialogs.waitFor('alertDialog', 'alert', function () {
     PileDialog.alertDialog = new PileDialog({
         prop: {
             skin: 'default',
@@ -179,7 +132,9 @@ var onLoad = function () {
         dialog.open();
         return promise;
     };
-    // ----------
+});
+
+DefaultDialogs.waitFor('confirmDialog', 'confirm', function () {
     PileDialog.confirmDialog = new PileDialog({
         prop: {
             skin: 'default',
@@ -253,4 +208,4 @@ var onLoad = function () {
         dialog.open();
         return promise;
     };
-};
+});
