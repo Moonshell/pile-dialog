@@ -1,7 +1,12 @@
-PileDialog.Para = function (opt) {
+var dialogTypes = require('./_dialog-types.js'),
+    dialogPrototypes = require('./_dialog-prototypes.js');
+
+module.exports = DialogPara;
+
+function DialogPara(opt) {
     var self = this;
-    if (!self instanceof PileDialog.Child) {
-        return new PileDialog.Child(opt);
+    if (!self instanceof DialogPara) {
+        return new DialogPara(opt);
     }
 
     var text = opt.text || '',
@@ -15,9 +20,21 @@ PileDialog.Para = function (opt) {
     self.dom.innerHTML = text;
 
     self.setStyle(style);
-};
+}
 
-
-PileDialog.Para.prototype = utils.extend({
-    dialogType: TYPES.PARA
-}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
+dialogTypes.register('PARA', DialogPara,
+    [dialogPrototypes.ENTITY, dialogPrototypes.IN_CONTAINER],
+    function parser(thing) {
+        if (typeof thing === 'string') {
+            return new DialogPara({
+                text: thing
+            });
+        } else {
+            return null;
+        }
+    },
+    function comparator(instance, thing) {
+        return instance === thing || instance.opt === thing ||
+            (instance.text === thing);
+    }
+);

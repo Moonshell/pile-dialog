@@ -1,4 +1,4 @@
-var utils = {
+var dialogUtils = {
     NODE_TYPES: {
         ELEMENT_NODE: 1,
         ATTRIBUTE_NODE: 2,
@@ -58,3 +58,5 @@ var utils = {
         return dom;
     }
 };
+
+module.exports = dialogUtils;

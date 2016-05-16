@@ -1,6 +1,11 @@
-var PROTOTYPES = PileDialog.PROTOTYPES = {
+var dialogUtils = require('./_dialog-utils.js'),
+    dialogTypes = require('./_dialog-types.js');
+
+/**
+ * 几种基本的 对话框相关原型
+ */
+module.exports = {
     ENTITY: {
-        'dialogType': TYPES.CHILD,
         'setAttr': function (attr, value) {
             var self = this;
             self.dom.setAttribute(attr, value);
@@ -40,48 +45,25 @@ var PROTOTYPES = PileDialog.PROTOTYPES = {
         },
         'append': function (thing) {
             var self = this,
-                child = self._recognize(thing);
-            self._append(child);
-        },
-        '_recognize': function (thing) {
-            var type = Object.prototype.toString.apply(thing),
-                child = null;
-            if (thing.dialogType) {
-                // 追加 Dialog.Child 对象
-                child = thing;
-            } else if (type === '[object String]') {
-                // 追加 字符串（自动转为 Dialog.Para 对象）
-                child = new PileDialog.Para({
-                    text: thing
-                });
-            } else if (type === '[object Object]' &&
-                typeof thing.text === 'string' &&
-                typeof thing.click === 'function') {
-                // 追加 按键（自动转为 Dialog.Button 对象）
-                child = new PileDialog.Button(thing);
-            } else if (/\[object HTML.*?Element]/i.test(type)) {
-                // 追加 DOM（自动转为 Dialog.Child 对象）
-                child = new PileDialog.Child({
-                    dom: thing
-                });
-            }
+                child = dialogTypes.tryParse(thing);
             if (!child) {
-                // 无法识别，放弃
-                return null;
+                var err = new Error('无法转换为对话框相关类：');
+                err.target = thing;
+                throw err;
             }
-            return child;
+            self._append(child);
         },
         '_prepend': function (child, _index) {
             var self = this,
                 index = _index | 0,
-                children = self.children
+                children = self.children;
             // 添加前，先从原有 parent 和 Dialog 中移除
             if (child._parent) {
                 child._parent.remove(child);
             }
             child._parent = self;
             children.splice(index, 0, child);
-            var nextNode = utils.getChildElem(self.dom, index);
+            var nextNode = dialogUtils.getChildElem(self.dom, index);
             if (nextNode) {
                 self.dom.insertBefore(child.dom, nextNode);
             } else {
@@ -102,40 +84,20 @@ var PROTOTYPES = PileDialog.PROTOTYPES = {
         'find': function (thing) {
             var self = this,
                 children = self.children,
-                type = Object.prototype.toString.apply(thing),
                 child = null;
             if (thing.dialogType && children.indexOf(thing) >= 0) {
                 // 寻找的是 Dialog.Child 对象
                 child = thing;
-            } else if (type === '[object Number]') {
+            } else if (typeof thing === 'number') {
                 // 寻找的是 Dialog.Child 对象序号
                 if (thing < 0) {
                     thing = children.length + thing;
                 }
                 child = children[thing];
-            } else if (type === '[object String]') {
-                // 寻找的是 字符串（尝试识别为 Dialog.Para 对象）
+            } else {
+                // 尝试进行 对话框相关类的对比
                 children.forEach(function (_child) {
-                    var match = (_child.text === thing);
-                    if (_child.dialogType === TYPES.PARA && match) {
-                        child = _child;
-                    }
-                });
-            } else if (type === '[object Object]' &&
-                typeof thing.text === 'string' &&
-                typeof thing.click === 'function') {
-                // 寻找的是 按键（尝试识别为 Dialog.Button 对象）
-                children.forEach(function (_child) {
-                    var match = (_child.opt === thing || (_child.text === thing.text && _child.click === thing.click));
-                    if (_child.dialogType === TYPES.BUTTON && match) {
-                        child = _child;
-                    }
-                });
-            } else if (/\[object HTML.*?Element]/i.test(type)) {
-                // 寻找的是 DOM（尝试识别为 Dialog.Child 对象）
-                children.forEach(function (_child) {
-                    var match = (_child.dom === thing);
-                    if (_child.dialogType === TYPES.CHILD && match) {
+                    if (dialogTypes.compare(_child, thing)) {
                         child = _child;
                     }
                 });

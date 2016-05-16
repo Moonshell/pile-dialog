@@ -1,7 +1,12 @@
-PileDialog.Button = function (opt) {
+var dialogTypes = require('./_dialog-types.js'),
+    dialogPrototypes = require('./_dialog-prototypes.js');
+
+module.exports = DialogButton;
+
+function DialogButton(opt) {
     var self = this;
-    if (!self instanceof PileDialog.Child) {
-        return new PileDialog.Child(opt);
+    if (!self instanceof DialogButton) {
+        return new DialogButton(opt);
     }
 
     var text = opt.text || '',
@@ -22,8 +27,22 @@ PileDialog.Button = function (opt) {
     });
 
     self.setStyle(style);
-};
+}
 
-PileDialog.Button.prototype = utils.extend({
-    dialogType: TYPES.BUTTON
-}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
+dialogTypes.register('BUTTON', DialogButton,
+    [dialogPrototypes.ENTITY, dialogPrototypes.IN_CONTAINER],
+    function parser(thing) {
+        if (thing instanceof Object &&
+            typeof thing.text === 'string' &&
+            typeof thing.click === 'function') {
+            return new DialogButton(thing);
+        } else {
+            return null;
+        }
+    },
+    function comparator(instance, thing) {
+        return instance === thing || instance.opt === thing ||
+            (instance.text === thing.text && instance.click === thing.click);
+    }
+);
+

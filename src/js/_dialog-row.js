@@ -1,7 +1,12 @@
-PileDialog.Row = function (opt) {
+var dialogTypes = require('./_dialog-types.js'),
+    dialogPrototypes = require('./_dialog-prototypes.js');
+
+module.exports = DialogRow;
+
+function DialogRow(opt) {
     var self = this;
-    if (!self instanceof PileDialog.Row) {
-        return new PileDialog.Row(opt);
+    if (!self instanceof DialogRow) {
+        return new DialogRow(opt);
     }
 
     self.children = [];
@@ -18,8 +23,8 @@ PileDialog.Row = function (opt) {
     content && self.setContent(content);
 
     self.setStyle(style);
-};
+}
 
-PileDialog.Row.prototype = utils.extend({
-    dialogType: TYPES.ROW
-}, PROTOTYPES.ENTITY, PROTOTYPES.CONTAINER, PROTOTYPES.IN_CONTAINER);
+dialogTypes.register('ROW', DialogRow,
+    [dialogPrototypes.ENTITY, dialogPrototypes.CONTAINER, dialogPrototypes.IN_CONTAINER]
+);

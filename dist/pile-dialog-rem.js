@@ -1,24 +1,24 @@
-/**
- * Pile Dialog
- *
- * Ver 0.5.8
- * Date 2016/4/21
- *
- * Created by krimeshu on 2016/1/13.
- */
-(function () {
-    var templateText = '<div class=\"dialog-cover\"></div>\r\n<div class=\"dialog-box\">\r\n    <p class=\"dialog-title\"></p>\r\n    <a class=\"dialog-close-btn\"></a>\r\n\r\n    <div class=\"dialog-content\"></div>\r\n</div>\r\n',
-        styleText = '@charset \"UTF-8\";html{font-size:20px}html{font-size:10px}@media screen and (min-width:320px){html{font-size:17px}}@media screen and (min-width:360px){html{font-size:19.2px}}@media screen and (min-width:375px){html{font-size:20px}}@media screen and (min-width:414px){html{font-size:22px}}body{font-size:14px}\n/*! Pile Dialog Styles */\n.pile-dialog-wrap.default .dialog-box{border-radius:.2rem;background-color:#fff;-webkit-box-shadow:0 0 .375rem rgba(0,0,0,.3);box-shadow:0 0 .375rem rgba(0,0,0,.3);margin:0 .4rem;min-width:40%}.pile-dialog-wrap.default .dialog-box .dialog-title{height:2.75rem;line-height:2.75rem;margin:0;padding-left:1.05rem;padding-right:1.05rem;border-radius:.2rem .2rem 0 0;border-bottom:1px solid #dadada;background-color:#fff;color:#333;font-size:.75rem}.pile-dialog-wrap.default .dialog-box .dialog-close-btn{width:1.4rem;height:1.4rem;padding:.625rem .675rem .725rem .675rem}.pile-dialog-wrap.default .dialog-box .dialog-close-btn::after{content:\"\";display:block;width:1.4rem;height:1.4rem;background:url(\"data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2lpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDozQzVBN0I0MTBEQjVFNTExOTg4N0JDNjUxNDI5NkNDQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpEMEExQUI0QkI5QkIxMUU1ODEyN0MyOUFFOEE2MkIzMCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpEMEExQUI0QUI5QkIxMUU1ODEyN0MyOUFFOEE2MkIzMCIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MDRiNGU5M2ItODQ0OS1kMTQ2LWFhN2EtNDhlZGI5ZDllOWZjIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjNDNUE3QjQxMERCNUU1MTE5ODg3QkM2NTE0Mjk2Q0NCIi8+IDwvcmRmOkRlc2Ny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\") no-repeat 0 0;background-size:1.4rem 1.4rem}.pile-dialog-wrap.default .dialog-box .dialog-content{padding-bottom:1.25rem;border-radius:.2rem .2rem 0 0;background-color:#fff;color:#333;font-size:.7rem}.pile-dialog-wrap.default .dialog-box .dialog-content .weak{color:#868686}.pile-dialog-wrap.default .dialog-box .dialog-content .small{font-size:.6rem}.pile-dialog-wrap.default .dialog-box .dialog-content .del{text-decoration:line-through}.pile-dialog-wrap.default .dialog-box .dialog-content .em{font-style:normal;text-shadow:0 0 4px #fcf988}.pile-dialog-wrap.default .dialog-box .dialog-content .link{display:inline-block;padding:.1rem 0;color:#e65d52;border-bottom:1px solid #e65d52}.pile-dialog-wrap.default .dialog-box .dialog-para{margin:1.25rem 1.05rem 0 1.05rem;padding:0}.pile-dialog-wrap.default .dialog-box .dialog-btn{margin:1.25rem 1.05rem 0 1.05rem;padding:0 .5rem;height:2rem;line-height:2rem;border-radius:.15rem;border:2px solid #767676;background-color:#fdf986;color:#545253;font-size:.75rem;text-align:center}.pile-dialog-wrap.default .dialog-box .dialog-btn:active{background-color:#827e02}.pile-dialog-wrap.default .dialog-box .dialog-btn[disabled]{background-color:#c5c5c5}.pile-dialog-wrap.flat{top:auto;bottom:0;-webkit-box-align:end;-webkit-align-items:flex-end;-ms-flex-align:end;-ms-grid-row-align:flex-end;align-items:flex-end}.pile-dialog-wrap.flat .dialog-box{background-color:#fff;width:100%}.pile-dialog-wrap.flat .dialog-box .dialog-title{height:2.5rem;line-height:2.5rem;color:#333;text-align:center;font-size:.8rem}.pile-dialog-wrap.flat .dialog-box .dialog-close-btn{display:none}.pile-dialog-wrap.flat .dialog-box .dialog-content{color:#535252;font-size:.7rem}.pile-dialog-wrap.flat .dialog-box .dialog-content .weak{color:#969696}.pile-dialog-wrap.flat .dialog-box .dialog-content .small{font-size:.6rem}.pile-dialog-wrap.flat .dialog-box .dialog-content .del{text-decoration:line-through}.pile-dialog-wrap.flat .dialog-box .dialog-content .em{font-style:normal;text-shadow:0 0 4px #e86a3e}.pile-dialog-wrap.flat .dialog-box .dialog-para{margin:1.25rem 1.75rem 0 1.75rem;padding:0}.pile-dialog-wrap.flat .dialog-box .dialog-btn{margin:1.25rem 0 0 0;padding:0;height:3rem;line-height:3rem;border-top:1px solid #c5c5c5;background-color:#f5f5ee;color:#535252;font-size:.8rem;text-align:center}.pile-dialog-wrap.toast{top:auto;bottom:3.75rem;height:auto}.pile-dialog-wrap.toast .dialog-box{display:inline-block;background-color:rgba(40,40,40,.95);border-radius:2.5rem;margin:0 auto}.pile-dialog-wrap.toast .dialog-box .dialog-title{height:2.5rem;line-height:2.5rem;color:#333;text-align:center;font-size:.8rem}.pile-dialog-wrap.toast .dialog-box .dialog-close-btn{display:none}.pile-dialog-wrap.toast .dialog-box .dialog-content{color:#c5c5c5;font-size:.65rem}.pile-dialog-wrap.toast .dialog-box .dialog-content .weak{color:#969696}.pile-dialog-wrap.toast .dialog-box .dialog-content .small{font-size:.6rem}.pile-dialog-wrap.toast .dialog-box .dialog-content .del{text-decoration:line-through}.pile-dialog-wrap.toast .dialog-box .dialog-content .em{font-style:normal;text-shadow:0 0 4px #e86a3e}.pile-dialog-wrap.toast .dialog-box .dialog-para{height:2.5rem;line-height:2.5rem;padding:0 1.75rem}.pile-dialog-wrap{display:none;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;-ms-grid-row-align:center;align-items:center;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;position:fixed;top:0;left:0;z-index:1000000;width:100%;height:100%;text-align:center;pointer-events:none}.pile-dialog-wrap.open{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}.pile-dialog-wrap .dialog-box,.pile-dialog-wrap .dialog-cover{pointer-events:auto}.dialog-cover{position:fixed;z-index:1000001;top:0;left:0;width:100%;height:100%;background-color:#000;-webkit-transition:opacity 300ms ease;transition:opacity 300ms ease;opacity:0}.dialog-cover.show{opacity:.25}.dialog-box{position:relative;z-index:1000002;overflow:hidden;-webkit-transition:opacity 300ms ease,-webkit-transform 300ms ease;transition:opacity 300ms ease,-webkit-transform 300ms ease;transition:transform 300ms ease,opacity 300ms ease;transition:transform 300ms ease,opacity 300ms ease,-webkit-transform 300ms ease;-webkit-transform:translate3d(0,100%,0);transform:translate3d(0,100%,0);opacity:0;text-align:left}.dialog-box.show{-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);opacity:1}.dialog-box .dialog-title{-webkit-box-sizing:border-box;box-sizing:border-box;overflow:hidden}.dialog-box .dialog-close-btn{display:block;position:absolute;top:0;right:0;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);cursor:pointer}.dialog-box .dialog-content{position:relative;overflow:hidden;text-overflow:ellipsis}.dialog-box .dialog-para{display:block;line-height:1.4}.dialog-box .dialog-btn{display:block;text-align:center;cursor:pointer}.dialog-box .dialog-row{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}';
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var TRANSITION_TIME = 300,
+    TEMPLATE_TEXT = null,
+    STYLE_TEXT = null;
 
-    /****************************************/
+module.exports = {
+    init: function (options) {
+        (options['TRANSITION_TIME']) && (TRANSITION_TIME = options['TRANSITION_TIME']);
+        (options['TEMPLATE_TEXT']) && (TEMPLATE_TEXT = options['TEMPLATE_TEXT']);
+        (options['STYLE_TEXT']) && (STYLE_TEXT = options['STYLE_TEXT']);
+        this.createStyle();
+    },
+    createStyle: function () {
+        var style = document.createElement('STYLE');
+        style.innerHTML = STYLE_TEXT;
+        document.body.appendChild(style);
+    },
+    constructor: PileDialog
+};
 
-    var TRANSITION_TIME = 300;
-
-var style = document.createElement('STYLE');
-style.innerHTML = styleText;
-document.body.appendChild(style);
-
-var utils = {
+var dialogUtils = {
     NODE_TYPES: {
         ELEMENT_NODE: 1,
         ATTRIBUTE_NODE: 2,
@@ -80,7 +80,7 @@ var utils = {
 };
 ;
 
-var PileDialog = function (opt) {
+function PileDialog(opt) {
     var self = this;
     if (!self instanceof PileDialog) {
         return new PileDialog(opt);
@@ -105,7 +105,7 @@ var PileDialog = function (opt) {
 
     var wrap = self.doms.wrap = document.createElement('DIV');
     wrap.className = 'pile-dialog-wrap';
-    wrap.innerHTML = templateText;
+    wrap.innerHTML = TEMPLATE_TEXT;
 
     self.doms.cover = wrap.getElementsByClassName('dialog-cover')[0];
     self.doms.box = wrap.getElementsByClassName('dialog-box')[0];
@@ -237,7 +237,7 @@ var PROTOTYPES = PileDialog.PROTOTYPES = {
             }
             child._parent = self;
             children.splice(index, 0, child);
-            var nextNode = utils.getChildElem(self.dom, index);
+            var nextNode = dialogUtils.getChildElem(self.dom, index);
             if (nextNode) {
                 self.dom.insertBefore(child.dom, nextNode);
             } else {
@@ -364,7 +364,7 @@ var PROTOTYPES = PileDialog.PROTOTYPES = {
 };
 ;
 
-PileDialog.prototype = utils.extend({
+PileDialog.prototype = dialogUtils.extend({
     dialogType: TYPES.DIALOG,
     'setTitle': function (title) {
         this.title = title;
@@ -437,7 +437,7 @@ PileDialog.prototype = utils.extend({
     'on': function (type, callback) {
         var self = this,
             typeCallbacks = self.callbacks[type];
-        if (!utils.isArray(typeCallbacks)) {
+        if (!dialogUtils.isArray(typeCallbacks)) {
             this.callbacks[type] = typeCallbacks = [];
         }
         typeCallbacks.push(callback);
@@ -453,7 +453,7 @@ PileDialog.prototype = utils.extend({
             }
         }
     }
-}, PROTOTYPES.ENTITY, PROTOTYPES.CONTAINER);
+}, dialogPrototypes.ENTITY, dialogPrototypes.CONTAINER);
 
 PileDialog.Para = function (opt) {
     var self = this;
@@ -475,9 +475,9 @@ PileDialog.Para = function (opt) {
 };
 
 
-PileDialog.Para.prototype = utils.extend({
+PileDialog.Para.prototype = dialogUtils.extend({
     dialogType: TYPES.PARA
-}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
+}, dialogPrototypes.ENTITY, dialogPrototypes.IN_CONTAINER);
 ;
 PileDialog.Button = function (opt) {
     var self = this;
@@ -505,9 +505,9 @@ PileDialog.Button = function (opt) {
     self.setStyle(style);
 };
 
-PileDialog.Button.prototype = utils.extend({
+PileDialog.Button.prototype = dialogUtils.extend({
     dialogType: TYPES.BUTTON
-}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
+}, dialogPrototypes.ENTITY, dialogPrototypes.IN_CONTAINER);
 ;
 PileDialog.Child = function (opt) {
     var self = this;
@@ -518,9 +518,9 @@ PileDialog.Child = function (opt) {
     self.dom = opt.dom;
 };
 
-PileDialog.Child.prototype = utils.extend({
+PileDialog.Child.prototype = dialogUtils.extend({
     dialogType: TYPES.CHILD
-}, PROTOTYPES.ENTITY, PROTOTYPES.IN_CONTAINER);
+}, dialogPrototypes.ENTITY, dialogPrototypes.IN_CONTAINER);
 ;
 PileDialog.Row = function (opt) {
     var self = this;
@@ -544,9 +544,9 @@ PileDialog.Row = function (opt) {
     self.setStyle(style);
 };
 
-PileDialog.Row.prototype = utils.extend({
+PileDialog.Row.prototype = dialogUtils.extend({
     dialogType: TYPES.ROW
-}, PROTOTYPES.ENTITY, PROTOTYPES.CONTAINER, PROTOTYPES.IN_CONTAINER);
+}, dialogPrototypes.ENTITY, dialogPrototypes.CONTAINER, dialogPrototypes.IN_CONTAINER);
 ;
 
 
@@ -641,7 +641,7 @@ PileDialog.createDefaultDialogs = function () {
             btnOk = dialog.find(-1),
             promise = new Promise();
 
-        if (!utils.isArray(contents)) {
+        if (!dialogUtils.isArray(contents)) {
             contents = [contents];
         }
         dialog.remove(btnOk);
@@ -711,7 +711,7 @@ PileDialog.createDefaultDialogs = function () {
                 confirm: btnTextConfirm || '确定'
             };
 
-        if (!utils.isArray(contents)) {
+        if (!dialogUtils.isArray(contents)) {
             contents = [contents];
         }
         dialog.remove(btnRow);
@@ -764,5 +764,29 @@ if (document.addEventListener) {
     window.attachEvent('onload', PileDialog.createDefaultDialogs);
 };
 
-window.PileDialog = PileDialog;;
+},{}],2:[function(require,module,exports){
+/**
+ * Pile Dialog
+ *
+ * Ver 0.5.8
+ * Date 2016/4/21
+ *
+ * Created by krimeshu on 2016/1/13.
+ */
+(function () {
+    'browserify entry';
+
+    var templateText = '<div class=\"dialog-cover\"></div>\r\n<div class=\"dialog-box\">\r\n    <p class=\"dialog-title\"></p>\r\n    <a class=\"dialog-close-btn\"></a>\r\n\r\n    <div class=\"dialog-content\"></div>\r\n</div>\r\n',
+        styleText = '@charset \"UTF-8\";html{font-size:20px}html{font-size:10px}@media screen and (min-width:320px){html{font-size:17px}}@media screen and (min-width:360px){html{font-size:19.2px}}@media screen and (min-width:375px){html{font-size:20px}}@media screen and (min-width:414px){html{font-size:22px}}body{font-size:14px}\n/*! Pile Dialog Styles */\n.pile-dialog-wrap.default .dialog-box{border-radius:.2rem;background-color:#fff;-webkit-box-shadow:0 0 .375rem rgba(0,0,0,.3);box-shadow:0 0 .375rem rgba(0,0,0,.3);margin:0 .4rem;min-width:40%}.pile-dialog-wrap.default .dialog-box .dialog-title{height:2.75rem;line-height:2.75rem;margin:0;padding-left:1.05rem;padding-right:1.05rem;border-radius:.2rem .2rem 0 0;border-bottom:1px solid #dadada;background-color:#fff;color:#333;font-size:.75rem}.pile-dialog-wrap.default .dialog-box .dialog-close-btn{width:1.4rem;height:1.4rem;padding:.625rem .675rem .725rem .675rem}.pile-dialog-wrap.default .dialog-box .dialog-close-btn::after{content:\"\";display:block;width:1.4rem;height:1.4rem;background:url(\"data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2lpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDozQzVBN0I0MTBEQjVFNTExOTg4N0JDNjUxNDI5NkNDQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpEMEExQUI0QkI5QkIxMUU1ODEyN0MyOUFFOEE2MkIzMCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpEMEExQUI0QUI5QkIxMUU1ODEyN0MyOUFFOEE2MkIzMCIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MDRiNGU5M2ItODQ0OS1kMTQ2LWFhN2EtNDhlZGI5ZDllOWZjIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjNDNUE3QjQxMERCNUU1MTE5ODg3QkM2NTE0Mjk2Q0NCIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+LzthDgAABstJREFUeNrsmmtsFFUUx8+W7WO7bbfEAD54WLQ8BASkAoaHwRREKRRqSxE0UhILBIlofMWPfDC826JijB/UD5oIpSmWgEkVsQgGaKKRAIkPyqstpcDutpSm27Lr+d89uzuzVMJ2Z2nFuclhpjP3nv/9zdy599yzWHw+H93LJY7u8WICmoAmoAloApqA/2dAa6QN8vLycvkwg20y2yG2HRUVFfW4525aGVVnHIM+DdcazIfVoncMeqy1JxKflkhCNRZED4rDLl9jm8nCJ40EZK0x8gD7h1X7jLWKDQdkwQw+nInjQV2w0E4ZD8fTgZp2OlbbgdsetgmffzLgtBGArDWaD7+xJUzJSqRZM21Ud7aTdlW2kderqgxnyDqjv8Hp+Gfqk0k0d3YyjcyMp1Ur0mjmtCRcTmA7XrS6eXS034zAHYdP+F7JGtCCJrS1fTEa0KZI4jWv30L0ytJUmjZVCdsxpBhyZBRwo2RY2uETvqERKAkJwVN7LAB/xj9HjnbQuQtdIQfsYcXLqTR5UiL+vI/tJ4YcESmctDkIH/AFn3Ga3kET2lIOGQ7IY/4UH77wdPpo63Y3XazXQxYXpdGkiQpyEFs1dzgzAjjUrUZb+MCw1MJBC5oej5ovvsSEFpN1kB0X8aG89bqXNpW6qeHSzeC9fv1IfZPjx6pxNJRtP3d8+B3Aoc5+tEHbVWFwjayxucxN0IQ292F5TBd6FigIQG4uddHl5hCklVfV11am0djRCvIRtr23g5R7e1EXbdDWqlmZ4XsTa7S0Krjdon1XIpklbHtcbi9tKHFR8xUtpIXWrkqjUSPUbIQZsZJBhnQDh2uVqIO6aIO2gQKf8A0NaInm3QnV+EneFMEqp9OrhtA1p1cz21nojTUOynxUQY4Lh9TAjUMd1EWbYOQgPp1+n1XQYs2unvTVEk3Siad1TNflbHMHDuhH772ZTv3TQ8+svd1HWz5005m6Tvx5lG0Rm0/gpgzPiKe31jrIZgvBOV08KrYFh/53bPkM19bTPlqizaoxpIMPu9hmP3C/HzItVQ+5kb+jc+fVCzgsl6cNG2qld9el6+DwrQGu0T95YVYtYDh3NP2zGJE2ZEjEi7vZZg1+yErvrHNQakoI8nobz7olbrogS8sQqZOiqROYmWX5+ZHtBYZzRts3i1F5UYYcKJDThw2x0tv8duzJFh0A3g4K3rL2AbTd8PEDcNH5i12BgAJwl43ol8XIxC9DDpLva2rGMIZ8XT8EZUakdId+CG8uc1HdOQX3C75Thmvqkxte3k2gY/lstejwto/c1NEReoAA08LhHuoIXK18c01G9snwHT1DYvO7Aed/8+x54pTnX+ueOOlRdaRsCGyc+zQgr3E5snTQkvwUyvLHp92WrCcSVR0p5TzEc/o0IMNly8JMBYvsNOcZm+7+6T86lWkL6qCulCqGzO6TgNyxp2XtooU5dnp+TrLu/p9/dVLpx25lONcW1EUbKdXsa0afAuQOTZa9HM1/Lply5+nhEMmU7PBvd2A413x7qqDNvLnBdjXis/cBuSMTJQyjZ7NtlLdAv9lGBINwDcsBl69hON/K186e14eX+bl25UPKUfHde4CS+VJw2bNsVJiXoruPyGXL9hAcz7DLYEHI7aHoJlDgA740kI/1CqAmORSP5NDSghRd/qShkTeqHHohTOOyU8ACSwnOd+Ie6qCuNs8DX5LMwnbkuGjdPUARROBsm/5UEi1fpk8ONV2+qaKTwC6cgQq7WS8LgxtnrnupSQ8Jn5LMwod5uKeQcT2ACySH+iNnWfSSHg4bVeweJCxD2FZ4G3e4V4m6m8r02QH4ROIJGpL8PSjasQMUgR/YBmIBR6JJmz+5es1LG0v0G1V+U97bRD1egVQbZ+wm4CM8mSXBAoL57yOFjIsADnUr2AZPeDzhlsyXv4Mu7qB6C/sEruMOQjuPQO5DW/hwOvWQ0Bo/TuV5VCaA+2KNxRtczzYGWeY1rzp0yaGWFt0Qw2L/Inf8RgTxazvaoK1KNLEvd4tXn8wqdmjzPOtjAaiii0Xz7To4tVEtcwcmiQNsi7nDLT0I0tFmMXzAF2ZXmaSCkNDW9sVowKtqd64RbWvzqeRQfUNXINuMYenq6ZTOuwmXDNea+sYu5RsawYfZGtRujgWgSpd/tes61f7aQb/zVgdpvQv+XfgRxNcM10xRFoa8Im/yCHxDA1rQhHakqftIfx/8FuFm2GWkGAq5Yw0G/z74IB++oVt/SapirQUxS1mw8Dr5BrAA4xfXDzT3on173em9L3o3RK+013IyfbGY/8vCBDQBTUAT0AQ0AU3A/275R4ABAE3qKMAyYJjGAAAAAElFTkSuQmCC\") no-repeat 0 0;background-size:1.4rem 1.4rem}.pile-dialog-wrap.default .dialog-box .dialog-content{padding-bottom:1.25rem;border-radius:.2rem .2rem 0 0;background-color:#fff;color:#333;font-size:.7rem}.pile-dialog-wrap.default .dialog-box .dialog-content .weak{color:#868686}.pile-dialog-wrap.default .dialog-box .dialog-content .small{font-size:.6rem}.pile-dialog-wrap.default .dialog-box .dialog-content .del{text-decoration:line-through}.pile-dialog-wrap.default .dialog-box .dialog-content .em{font-style:normal;text-shadow:0 0 4px #fcf988}.pile-dialog-wrap.default .dialog-box .dialog-content .link{display:inline-block;padding:.1rem 0;color:#e65d52;border-bottom:1px solid #e65d52}.pile-dialog-wrap.default .dialog-box .dialog-para{margin:1.25rem 1.05rem 0 1.05rem;padding:0}.pile-dialog-wrap.default .dialog-box .dialog-btn{margin:1.25rem 1.05rem 0 1.05rem;padding:0 .5rem;height:2rem;line-height:2rem;border-radius:.15rem;border:2px solid #767676;background-color:#fdf986;color:#545253;font-size:.75rem;text-align:center}.pile-dialog-wrap.default .dialog-box .dialog-btn:active{background-color:#827e02}.pile-dialog-wrap.default .dialog-box .dialog-btn[disabled]{background-color:#c5c5c5}.pile-dialog-wrap.flat{top:auto;bottom:0;-webkit-box-align:end;-webkit-align-items:flex-end;-ms-flex-align:end;-ms-grid-row-align:flex-end;align-items:flex-end}.pile-dialog-wrap.flat .dialog-box{background-color:#fff;width:100%}.pile-dialog-wrap.flat .dialog-box .dialog-title{height:2.5rem;line-height:2.5rem;color:#333;text-align:center;font-size:.8rem}.pile-dialog-wrap.flat .dialog-box .dialog-close-btn{display:none}.pile-dialog-wrap.flat .dialog-box .dialog-content{color:#535252;font-size:.7rem}.pile-dialog-wrap.flat .dialog-box .dialog-content .weak{color:#969696}.pile-dialog-wrap.flat .dialog-box .dialog-content .small{font-size:.6rem}.pile-dialog-wrap.flat .dialog-box .dialog-content .del{text-decoration:line-through}.pile-dialog-wrap.flat .dialog-box .dialog-content .em{font-style:normal;text-shadow:0 0 4px #e86a3e}.pile-dialog-wrap.flat .dialog-box .dialog-para{margin:1.25rem 1.75rem 0 1.75rem;padding:0}.pile-dialog-wrap.flat .dialog-box .dialog-btn{margin:1.25rem 0 0 0;padding:0;height:3rem;line-height:3rem;border-top:1px solid #c5c5c5;background-color:#f5f5ee;color:#535252;font-size:.8rem;text-align:center}.pile-dialog-wrap.toast{top:auto;bottom:3.75rem;height:auto}.pile-dialog-wrap.toast .dialog-box{display:inline-block;background-color:rgba(40,40,40,.95);border-radius:2.5rem;margin:0 auto}.pile-dialog-wrap.toast .dialog-box .dialog-title{height:2.5rem;line-height:2.5rem;color:#333;text-align:center;font-size:.8rem}.pile-dialog-wrap.toast .dialog-box .dialog-close-btn{display:none}.pile-dialog-wrap.toast .dialog-box .dialog-content{color:#c5c5c5;font-size:.65rem}.pile-dialog-wrap.toast .dialog-box .dialog-content .weak{color:#969696}.pile-dialog-wrap.toast .dialog-box .dialog-content .small{font-size:.6rem}.pile-dialog-wrap.toast .dialog-box .dialog-content .del{text-decoration:line-through}.pile-dialog-wrap.toast .dialog-box .dialog-content .em{font-style:normal;text-shadow:0 0 4px #e86a3e}.pile-dialog-wrap.toast .dialog-box .dialog-para{height:2.5rem;line-height:2.5rem;padding:0 1.75rem}.pile-dialog-wrap{display:none;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;-ms-grid-row-align:center;align-items:center;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;position:fixed;top:0;left:0;z-index:1000000;width:100%;height:100%;text-align:center;pointer-events:none}.pile-dialog-wrap.open{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}.pile-dialog-wrap .dialog-box,.pile-dialog-wrap .dialog-cover{pointer-events:auto}.dialog-cover{position:fixed;z-index:1000001;top:0;left:0;width:100%;height:100%;background-color:#000;-webkit-transition:opacity 300ms ease;transition:opacity 300ms ease;opacity:0}.dialog-cover.show{opacity:.25}.dialog-box{position:relative;z-index:1000002;overflow:hidden;-webkit-transition:opacity 300ms ease,-webkit-transform 300ms ease;transition:opacity 300ms ease,-webkit-transform 300ms ease;transition:transform 300ms ease,opacity 300ms ease;transition:transform 300ms ease,opacity 300ms ease,-webkit-transform 300ms ease;-webkit-transform:translate3d(0,100%,0);transform:translate3d(0,100%,0);opacity:0;text-align:left}.dialog-box.show{-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);opacity:1}.dialog-box .dialog-title{-webkit-box-sizing:border-box;box-sizing:border-box;overflow:hidden}.dialog-box .dialog-close-btn{display:block;position:absolute;top:0;right:0;-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);cursor:pointer}.dialog-box .dialog-content{position:relative;overflow:hidden;text-overflow:ellipsis}.dialog-box .dialog-para{display:block;line-height:1.4}.dialog-box .dialog-btn{display:block;text-align:center;cursor:pointer}.dialog-box .dialog-row{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}',
+        base = require('./js/_pile-dialog.js');
+
+    /****************************************/
+
+    base.init({
+        TEMPLATE_TEXT: templateText,
+        STYLE_TEXT: styleText
+    });
+
+    module.exports = window.PileDialog = base.constructor;
 })();
+},{"./js/_pile-dialog.js":1}]},{},[2]);

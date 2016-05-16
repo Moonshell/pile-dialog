@@ -1,4 +1,45 @@
-PileDialog.createDefaultDialogs = function () {
+var dialogUtils = require('./_dialog-utils.js');
+
+var defaultDialogs = module.exports = {
+    _pileDialog: null,
+    _pageLoaded: false,
+    _creators: {},
+    createFor: function (pileDialog) {
+        var self = this;
+        self._pileDialog = pileDialog;
+
+        if (document.addEventListener) {
+            document.addEventListener('DOMContentLoaded', function () {
+                self._onLoad();
+            });
+        } else if (window.addEventListener) {
+            window.addEventListener('load', function () {
+                self._onLoad();
+            });
+        } else if (window.attachEvent) {
+            window.attachEvent('onload', function () {
+                self._onLoad();
+            });
+        }
+    },
+    define: function (opts) {
+        for (var name in opts) {
+            if (!opts.hasOwnProperty(name)) {
+                continue;
+            }
+            this._creators[name] = opts[name];
+        }
+    },
+    doCreate: function (name, creator) {
+        this._pileDialog[name] = creator();
+    },
+    _onLoad: function () {
+        this._pageLoaded = true;
+
+    }
+};
+
+var onLoad = function () {
     PileDialog.toastDialog = new PileDialog({
         prop: {
             skin: 'toast',
@@ -61,7 +102,7 @@ PileDialog.createDefaultDialogs = function () {
             btnOk = dialog.find(-1),
             promise = new Promise();
 
-        if (!utils.isArray(contents)) {
+        if (!dialogUtils.isArray(contents)) {
             contents = [contents];
         }
         dialog.remove(btnOk);
@@ -131,7 +172,7 @@ PileDialog.createDefaultDialogs = function () {
                 confirm: btnTextConfirm || '确定'
             };
 
-        if (!utils.isArray(contents)) {
+        if (!dialogUtils.isArray(contents)) {
             contents = [contents];
         }
         dialog.remove(btnRow);
@@ -172,14 +213,12 @@ PileDialog.waitDefaultDialog = function (dialogName, funcName) {
     };
 };
 
-PileDialog.waitDefaultDialog('toastDialog', 'toast');
-PileDialog.waitDefaultDialog('alertDialog', 'alert');
-PileDialog.waitDefaultDialog('confirmDialog', 'confirm');
+PileDialog.waitDefaultDialog('toastDialog', 'toast', function () {
 
-if (document.addEventListener) {
-    document.addEventListener('DOMContentLoaded', PileDialog.createDefaultDialogs);
-} else if (window.addEventListener) {
-    window.addEventListener('load', PileDialog.createDefaultDialogs);
-} else if (window.attachEvent) {
-    window.attachEvent('onload', PileDialog.createDefaultDialogs);
-}
+});
+PileDialog.waitDefaultDialog('alertDialog', 'alert', function () {
+
+});
+PileDialog.waitDefaultDialog('confirmDialog', 'confirm', function () {
+
+});

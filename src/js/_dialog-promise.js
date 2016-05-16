@@ -1,9 +1,12 @@
-var Promise = PileDialog.Promise = function () {
-    this.callbacks = [];
-};
+module.exports = DialogPromise;
 
-Promise.prototype = {
-    'construct': Promise,
+function DialogPromise() {
+    var self = this;
+    self.callbacks = [];
+}
+
+DialogPromise.prototype = {
+    'construct': DialogPromise,
     'resolve': function (result) {
         this.complete("resolve", result);
     },

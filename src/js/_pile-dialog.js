@@ -1,12 +1,14 @@
-var TRANSITION_TIME = 300;
+var dialogUtils = require('./_dialog-utils.js'),
+    dialogTypes = require('./_dialog-types.js'),
+    dialogPrototypes = require('./_dialog-prototypes.js'),
 
-var style = document.createElement('STYLE');
-style.innerHTML = styleText;
-document.body.appendChild(style);
+    TRANSITION_TIME = 300,
+    TEMPLATE_TEXT = null,
+    STYLE_TEXT = null;
 
-//#include('_dialog-utils.js');
+module.exports = PileDialog;
 
-var PileDialog = function (opt) {
+function PileDialog(opt) {
     var self = this;
     if (!self instanceof PileDialog) {
         return new PileDialog(opt);
@@ -31,7 +33,7 @@ var PileDialog = function (opt) {
 
     var wrap = self.doms.wrap = document.createElement('DIV');
     wrap.className = 'pile-dialog-wrap';
-    wrap.innerHTML = templateText;
+    wrap.innerHTML = TEMPLATE_TEXT;
 
     self.doms.cover = wrap.getElementsByClassName('dialog-cover')[0];
     self.doms.box = wrap.getElementsByClassName('dialog-box')[0];
@@ -66,24 +68,28 @@ var PileDialog = function (opt) {
 
     onOpen && self.on('open', onOpen);
     onClose && self.on('close', onClose);
-};
-
+}
 
 /****************************************/
 
 PileDialog.topZIndex = 1000000;
-var TYPES = PileDialog.TYPES = {
-    DIALOG: 'DIALOG',
-    PARA: 'PARAGRAPH',
-    BUTTON: 'BUTTON',
-    CHILD: 'CHILD',
-    ROW: 'ROW',
-    OTHER: 'OTHER'
-};
-//#include('_dialog-prototypes.js');
 
-PileDialog.prototype = utils.extend({
-    dialogType: TYPES.DIALOG,
+PileDialog.setOptions = function (options) {
+    (options['TRANSITION_TIME']) && (TRANSITION_TIME = options['TRANSITION_TIME']);
+    (options['TEMPLATE_TEXT']) && (TEMPLATE_TEXT = options['TEMPLATE_TEXT']);
+    (options['STYLE_TEXT']) && (STYLE_TEXT = options['STYLE_TEXT']);
+    this.createStyle();
+};
+
+PileDialog.createStyle = function () {
+    var style = document.createElement('STYLE');
+    style.innerHTML = STYLE_TEXT;
+    document.body.appendChild(style);
+};
+
+/****************************************/
+
+dialogTypes.register('DIALOG', PileDialog, [{
     'setTitle': function (title) {
         this.title = title;
         this.doms.title.innerHTML = title;
@@ -155,8 +161,8 @@ PileDialog.prototype = utils.extend({
     'on': function (type, callback) {
         var self = this,
             typeCallbacks = self.callbacks[type];
-        if (!utils.isArray(typeCallbacks)) {
-            this.callbacks[type] = typeCallbacks = [];
+        if (!dialogUtils.isArray(typeCallbacks)) {
+            self.callbacks[type] = typeCallbacks = [];
         }
         typeCallbacks.push(callback);
     },
@@ -171,16 +177,4 @@ PileDialog.prototype = utils.extend({
             }
         }
     }
-}, PROTOTYPES.ENTITY, PROTOTYPES.CONTAINER);
-
-//#include('_dialog-para.js');
-//#include('_dialog-button.js');
-//#include('_dialog-child.js');
-//#include('_dialog-row.js');
-
-
-//#include('_dialog-promise.js');
-
-//#include('_default-dialogs.js');
-
-window.PileDialog = PileDialog;
+}, dialogPrototypes.ENTITY, dialogPrototypes.CONTAINER]);
