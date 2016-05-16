@@ -1,13 +1,13 @@
-var dialogUtils = require('./_dialog-utils.js');
+var dialogUtils = require('./_dialog-utils.js'),
 
-var defaultDialogs = module.exports = {
-    _pileDialog: null,
+    PileDialog = require('./_pile-dialog.js');
+
+var DefaultDialogs = module.exports = {
     _pageLoaded: false,
-    _creators: {},
-    createFor: function (pileDialog) {
+    _names: [],
+    _defined: {},
+    startCreate: function () {
         var self = this;
-        self._pileDialog = pileDialog;
-
         if (document.addEventListener) {
             document.addEventListener('DOMContentLoaded', function () {
                 self._onLoad();
@@ -22,7 +22,18 @@ var defaultDialogs = module.exports = {
             });
         }
     },
-    define: function (opts) {
+    _onLoad: function () {
+        this._pageLoaded = true;
+
+        var creators = this._creators;
+        for (var name in creators) {
+            if (!creators.hasOwnProperty(name)) {
+                continue;
+            }
+            this.doCreate(name, creators[name]);
+        }
+    },
+    define: function () {
         for (var name in opts) {
             if (!opts.hasOwnProperty(name)) {
                 continue;
@@ -30,14 +41,63 @@ var defaultDialogs = module.exports = {
             this._creators[name] = opts[name];
         }
     },
-    doCreate: function (name, creator) {
-        this._pileDialog[name] = creator();
-    },
-    _onLoad: function () {
-        this._pageLoaded = true;
-
+    waitFor: function (dialogName, funcName) {
+        if (PileDialog[dialogName]) {
+            console.error('PileDialog.%s 已存在。\n(PileDialog.%s already exists.)', dialogName, dialogName);
+            return;
+        }
+        if (PileDialog[funcName]) {
+            console.error('PileDialog.%s 已存在。\n(PileDialog.%s already exists.)', funcName, funcName);
+            return;
+        }
+        PileDialog[funcName] = function () {
+            // console.log('Dialog.%s 还没有准备好……', funcName);
+            var args = arguments;
+            window.setTimeout(function () {
+                PileDialog[funcName].apply(PileDialog[dialogName], args);
+            }, 50);
+        };
     }
 };
+
+DefaultDialogs.define(
+    'toastDialog', function () {
+        var dialog = new PileDialog({
+            prop: {
+                skin: 'toast',
+                cover: false,
+                closeBtn: false,
+                lock: false
+            },
+            content: [
+                ''
+            ]
+        });
+        dialog.hideTitle();
+        return dialog;
+    },
+    'toast', function (dialog) {
+        return function (msg, time, callback) {
+            dialog.find(0).setText(msg);
+            dialog.open();
+            if (dialog._closeTimeout) {
+                window.clearTimeout(dialog._closeTimeout);
+            }
+            if (arguments.length === 2 && typeof time === 'function') {
+                callback = time;
+                time = undefined;
+            }
+            time = time === undefined ? 2500 : time;
+            if (time) {
+                dialog._closeTimeout = window.setTimeout(function () {
+                    dialog.close();
+                    dialog._closeTimeout = null;
+                    callback && callback();
+                }, time);
+            }
+        };
+    }
+);
 
 var onLoad = function () {
     PileDialog.toastDialog = new PileDialog({
@@ -194,31 +254,3 @@ var onLoad = function () {
         return promise;
     };
 };
-
-PileDialog.waitDefaultDialog = function (dialogName, funcName) {
-    if (PileDialog[dialogName]) {
-        console.error('PileDialog.%s 已存在。\n(PileDialog.%s already exists.)', dialogName, dialogName);
-        return;
-    }
-    if (PileDialog[funcName]) {
-        console.error('PileDialog.%s 已存在。\n(PileDialog.%s already exists.)', funcName, funcName);
-        return;
-    }
-    PileDialog[funcName] = function () {
-        // console.log('Dialog.%s 还没有准备好……', funcName);
-        var args = arguments;
-        window.setTimeout(function () {
-            PileDialog[funcName].apply(PileDialog[dialogName], args);
-        }, 50);
-    };
-};
-
-PileDialog.waitDefaultDialog('toastDialog', 'toast', function () {
-
-});
-PileDialog.waitDefaultDialog('alertDialog', 'alert', function () {
-
-});
-PileDialog.waitDefaultDialog('confirmDialog', 'confirm', function () {
-
-});

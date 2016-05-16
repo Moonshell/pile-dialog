@@ -33,6 +33,6 @@
     PileDialog.Row = DialogRow;
 
     module.exports = window.PileDialog = PileDialog;
-    
+
     DefaultDialogs.startCreate();
 })();
