@@ -1,7 +1,7 @@
 var dialogUtils = require('./_dialog-utils.js'),
 
-    PileDialog = require('./_pile-dialog.js'),
-    Promise = require('./_dialog-promise.js');
+    Promise = require('./_dialog-promise.js'),
+    PileDialog = window.PileDialog || require('./_pile-dialog.js');
 
 var DefaultDialogs = module.exports = {
     _pageLoaded: false,

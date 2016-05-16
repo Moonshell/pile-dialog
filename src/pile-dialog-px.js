@@ -20,6 +20,8 @@
 
         DefaultDialogs = require('./js/_default-dialogs.js');
 
+    module.exports = PileDialog;
+
     /****************************************/
 
     PileDialog.setOptions({
@@ -32,7 +34,7 @@
     PileDialog.Button = DialogButton;
     PileDialog.Row = DialogRow;
 
-    module.exports = window.PileDialog = PileDialog;
+    window.PileDialog = PileDialog;
 
     DefaultDialogs.startCreate();
 })();
