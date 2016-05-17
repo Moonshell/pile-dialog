@@ -6,22 +6,16 @@ var dialogUtils = require('./_dialog-utils.js'),
     DialogChild = require('./_dialog-child.js'),
     DialogPara = require('./_dialog-para.js'),
     DialogButton = require('./_dialog-button.js'),
-    DialogRow = require('./_dialog-row.js');
+    DialogRow = require('./_dialog-row.js'),
 
-window.PileDialog = Dialog;
-window.PileDialogChild = DialogChild;
-window.PileDialogPara = DialogPara;
-window.PileDialogButton = DialogButton;
-window.PileDialogRow = DialogRow;
+    DOMLoadState = require('./_dom-load-state.js');
 
 var initializer = module.exports = {
     _initialized: false,
-    _pageLoaded: false,
     _creators: [],
     init: function (opts) {
         var self = this,
             initialized = self._initialized,
-            pageLoaded = self._pageLoaded,
             transitionTime = opts['transitionTime'] || 300,
             dialogWrapClassName = opts['dialogWrapClassName'] || 'pile-dialog-wrap',
             templateText = opts['templateText'] || '',
@@ -36,39 +30,32 @@ var initializer = module.exports = {
             WRAP_CLASS_NAME: dialogWrapClassName,
             TEMPLATE_TEXT: templateText
         });
+
         styleText && self._createStyle(styleText);
 
-        // Todo: 此处逻辑有误，请检查
-        if (pageLoaded) {
+        if (DOMLoadState.isLoaded()) {
             self.doCreate();
         } else {
-            self._bindLoadEvent(function () {
+            DOMLoadState.whenLoad(function () {
                 self.doCreate();
             });
         }
+
+        self._expose();
     },
     _createStyle: function (styleText) {
         var style = document.createElement('STYLE');
         style.innerHTML = styleText;
         document.body.appendChild(style);
     },
-    _bindLoadEvent: function (cb) {
-        var self = this,
-            onLoad = function () {
-                self._pageLoaded = true;
-                cb && cb();
-            };
-        if (document.addEventListener) {
-            document.addEventListener('DOMContentLoaded', onLoad);
-        } else if (window.addEventListener) {
-            window.addEventListener('load', onLoad);
-        } else if (window.attachEvent) {
-            window.attachEvent('onload', onLoad);
-        }
+    _expose: function () {
+        window.PileDialog = Dialog;
+        window.PileDialogChild = DialogChild;
+        window.PileDialogPara = DialogPara;
+        window.PileDialogButton = DialogButton;
+        window.PileDialogRow = DialogRow;
     },
     doCreate: function () {
-        this._pageLoaded = true;
-
         var creators = this._creators;
         creators.forEach(function (creator) {
             creator();

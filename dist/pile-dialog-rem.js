@@ -645,6 +645,43 @@ dialogTypes.register('DIALOG', Dialog, [{
 }, dialogPrototypes.ENTITY, dialogPrototypes.CONTAINER]);
 
 },{"./_dialog-prototypes.js":5,"./_dialog-types.js":7,"./_dialog-utils.js":8}],10:[function(require,module,exports){
+/**
+ * Created by krimeshu on 2016/5/17.
+ */
+
+var _loaded = false,
+    _cbs = [];
+
+var DOMLoadState = module.exports = {
+    isLoaded: function () {
+        return _loaded;
+    },
+    whenLoad: function (cb) {
+        _cbs.push(cb);
+    },
+    _bindEvent: function () {
+        var self = this,
+            onLoad = function () {
+                self._onLoad();
+            };
+        if (document.addEventListener) {
+            document.addEventListener('DOMContentLoaded', onLoad);
+        } else if (window.addEventListener) {
+            window.addEventListener('load', onLoad);
+        } else if (window.attachEvent) {
+            window.attachEvent('onload', onLoad);
+        }
+    },
+    _onLoad: function () {
+        _loaded = true;
+        _cbs.forEach(function (cb) {
+            cb && cb();
+        });
+    }
+};
+
+DOMLoadState._bindEvent();
+},{}],11:[function(require,module,exports){
 var dialogUtils = require('./_dialog-utils.js'),
 
     Promise = require('./_dialog-promise.js'),
@@ -653,22 +690,16 @@ var dialogUtils = require('./_dialog-utils.js'),
     DialogChild = require('./_dialog-child.js'),
     DialogPara = require('./_dialog-para.js'),
     DialogButton = require('./_dialog-button.js'),
-    DialogRow = require('./_dialog-row.js');
+    DialogRow = require('./_dialog-row.js'),
 
-window.PileDialog = Dialog;
-window.PileDialogChild = DialogChild;
-window.PileDialogPara = DialogPara;
-window.PileDialogButton = DialogButton;
-window.PileDialogRow = DialogRow;
+    DOMLoadState = require('./_dom-load-state.js');
 
 var initializer = module.exports = {
     _initialized: false,
-    _pageLoaded: false,
     _creators: [],
     init: function (opts) {
         var self = this,
             initialized = self._initialized,
-            pageLoaded = self._pageLoaded,
             transitionTime = opts['transitionTime'] || 300,
             dialogWrapClassName = opts['dialogWrapClassName'] || 'pile-dialog-wrap',
             templateText = opts['templateText'] || '',
@@ -683,39 +714,32 @@ var initializer = module.exports = {
             WRAP_CLASS_NAME: dialogWrapClassName,
             TEMPLATE_TEXT: templateText
         });
+
         styleText && self._createStyle(styleText);
 
-        // Todo: 此处逻辑有误，请检查
-        if (pageLoaded) {
+        if (DOMLoadState.isLoaded()) {
             self.doCreate();
         } else {
-            self._bindLoadEvent(function () {
+            DOMLoadState.whenLoad(function () {
                 self.doCreate();
             });
         }
+
+        self._expose();
     },
     _createStyle: function (styleText) {
         var style = document.createElement('STYLE');
         style.innerHTML = styleText;
         document.body.appendChild(style);
     },
-    _bindLoadEvent: function (cb) {
-        var self = this,
-            onLoad = function () {
-                self._pageLoaded = true;
-                cb && cb();
-            };
-        if (document.addEventListener) {
-            document.addEventListener('DOMContentLoaded', onLoad);
-        } else if (window.addEventListener) {
-            window.addEventListener('load', onLoad);
-        } else if (window.attachEvent) {
-            window.attachEvent('onload', onLoad);
-        }
+    _expose: function () {
+        window.PileDialog = Dialog;
+        window.PileDialogChild = DialogChild;
+        window.PileDialogPara = DialogPara;
+        window.PileDialogButton = DialogButton;
+        window.PileDialogRow = DialogRow;
     },
     doCreate: function () {
-        this._pageLoaded = true;
-
         var creators = this._creators;
         creators.forEach(function (creator) {
             creator();
@@ -901,11 +925,11 @@ initializer.lazyCreate('confirmDialog', 'confirm', function () {
     };
 });
 
-},{"./_dialog-button.js":1,"./_dialog-child.js":2,"./_dialog-para.js":3,"./_dialog-promise.js":4,"./_dialog-row.js":6,"./_dialog-utils.js":8,"./_dialog.js":9}],11:[function(require,module,exports){
+},{"./_dialog-button.js":1,"./_dialog-child.js":2,"./_dialog-para.js":3,"./_dialog-promise.js":4,"./_dialog-row.js":6,"./_dialog-utils.js":8,"./_dialog.js":9,"./_dom-load-state.js":10}],12:[function(require,module,exports){
 /**
  * Pile Dialog
  *
- * Ver 1.0.2
+ * Ver 1.0.3
  * Date 2016/5/17
  *
  * Created by krimeshu on 2016/1/13.
@@ -926,4 +950,4 @@ initializer.lazyCreate('confirmDialog', 'confirm', function () {
     });
 
 })();
-},{"./js/_initializer.js":10}]},{},[11]);
+},{"./js/_initializer.js":11}]},{},[12]);
