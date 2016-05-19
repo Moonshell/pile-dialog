@@ -21,4 +21,6 @@
         styleText: styleText
     });
 
+    module.exports = initializer.expose();
+
 })();

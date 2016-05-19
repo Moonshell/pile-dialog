@@ -34,47 +34,47 @@ var initializer = module.exports = {
         styleText && self._createStyle(styleText);
 
         if (DOMLoadState.isLoaded()) {
-            self.doCreate();
+            self._doCreate();
         } else {
             DOMLoadState.whenLoad(function () {
-                self.doCreate();
+                self._doCreate();
             });
         }
-
-        self._expose();
     },
     _createStyle: function (styleText) {
         var style = document.createElement('STYLE');
         style.innerHTML = styleText;
         document.body.appendChild(style);
     },
-    _expose: function () {
+    expose: function () {
         window.PileDialog = Dialog;
         window.PileDialogChild = DialogChild;
         window.PileDialogPara = DialogPara;
         window.PileDialogButton = DialogButton;
         window.PileDialogRow = DialogRow;
+
+        return Dialog;
     },
-    doCreate: function () {
+    _doCreate: function () {
         var creators = this._creators;
         creators.forEach(function (creator) {
             creator();
         });
     },
     lazyCreate: function (dialogName, funcName, creator) {
-        if (PileDialog[dialogName]) {
+        if (Dialog[dialogName]) {
             console.error('PileDialog.%s 已存在。\n(PileDialog.%s already exists.)', dialogName, dialogName);
             return;
         }
-        if (PileDialog[funcName]) {
+        if (Dialog[funcName]) {
             console.error('PileDialog.%s 已存在。\n(PileDialog.%s already exists.)', funcName, funcName);
             return;
         }
-        PileDialog[funcName] = function () {
+        Dialog[funcName] = function () {
             // console.log('Dialog.%s 还没有准备好……', funcName);
             var args = arguments;
             window.setTimeout(function () {
-                PileDialog[funcName].apply(PileDialog[dialogName], args);
+                Dialog[funcName].apply(Dialog[dialogName], args);
             }, 50);
         };
         this._creators.push(creator);
@@ -82,7 +82,7 @@ var initializer = module.exports = {
 };
 
 initializer.lazyCreate('toastDialog', 'toast', function () {
-    PileDialog.toastDialog = new PileDialog({
+    Dialog.toastDialog = new Dialog({
         prop: {
             skin: 'toast',
             cover: false,
@@ -93,9 +93,9 @@ initializer.lazyCreate('toastDialog', 'toast', function () {
             ''
         ]
     });
-    PileDialog.toastDialog.hideTitle();
-    PileDialog.toast = function (msg, time, callback) {
-        var dialog = PileDialog.toastDialog;
+    Dialog.toastDialog.hideTitle();
+    Dialog.toast = function (msg, time, callback) {
+        var dialog = Dialog.toastDialog;
         dialog.find(0).setText(msg);
         dialog.open();
         if (dialog._closeTimeout) {
@@ -117,7 +117,7 @@ initializer.lazyCreate('toastDialog', 'toast', function () {
 });
 
 initializer.lazyCreate('alertDialog', 'alert', function () {
-    PileDialog.alertDialog = new PileDialog({
+    Dialog.alertDialog = new Dialog({
         prop: {
             skin: 'default',
             cover: true,
@@ -135,14 +135,14 @@ initializer.lazyCreate('alertDialog', 'alert', function () {
             }
         ]
     });
-    PileDialog.alertDialog.on('close', function (e) {
+    Dialog.alertDialog.on('close', function (e) {
         var dialog = this,
             promise = dialog._promise,
             resolved = dialog._resolved;
         promise && (resolved ? promise.resolve(e) : promise.reject(e));
     });
-    PileDialog.alert = function (contents, title) {
-        var dialog = PileDialog.alertDialog,
+    Dialog.alert = function (contents, title) {
+        var dialog = Dialog.alertDialog,
             btnOk = dialog.find(-1),
             promise = new Promise();
 
@@ -166,7 +166,7 @@ initializer.lazyCreate('alertDialog', 'alert', function () {
 });
 
 initializer.lazyCreate('confirmDialog', 'confirm', function () {
-    PileDialog.confirmDialog = new PileDialog({
+    Dialog.confirmDialog = new Dialog({
         prop: {
             skin: 'default',
             cover: true,
@@ -203,14 +203,14 @@ initializer.lazyCreate('confirmDialog', 'confirm', function () {
             })
         ]
     });
-    PileDialog.confirmDialog.on('close', function (e) {
+    Dialog.confirmDialog.on('close', function (e) {
         var dialog = this,
             promise = dialog._promise,
             resolved = dialog._resolved;
         promise && (resolved ? promise.resolve(e) : promise.reject(e));
     });
-    PileDialog.confirm = function (contents, title, btnTextCancel, btnTextConfirm) {
-        var dialog = PileDialog.confirmDialog,
+    Dialog.confirm = function (contents, title, btnTextCancel, btnTextConfirm) {
+        var dialog = Dialog.confirmDialog,
             btnRow = dialog.find(-1),
             promise = new Promise(),
             btnText = {
