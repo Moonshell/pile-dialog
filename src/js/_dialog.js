@@ -44,13 +44,13 @@ function Dialog(opt) {
     self.doms.wrap.addEventListener('touchmove', function (e) {
         e.preventDefault();
     });
-    self.doms.cover.addEventListener('click', function () {
+    self.doms.cover.addEventListener('click', function (e) {
         if (!self.isLocked) {
-            self.close();
+            self.close(e);
         }
     });
-    self.doms.closeBtn.addEventListener('click', function () {
-        self.close();
+    self.doms.closeBtn.addEventListener('click', function (e) {
+        self.close(e);
     });
 
     // 内容部分的DOM作为默认DOM

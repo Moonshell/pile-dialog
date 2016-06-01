@@ -141,7 +141,7 @@ initializer.lazyCreate('alertDialog', 'alert', function () {
             resolved = dialog._resolved;
         promise && (resolved ? promise.resolve(e) : promise.reject(e));
     });
-    Dialog.alert = function (contents, title) {
+    Dialog.alert = function (contents, title, btnText) {
         var dialog = Dialog.alertDialog,
             btnOk = dialog.find(-1),
             promise = new Promise();
@@ -156,6 +156,7 @@ initializer.lazyCreate('alertDialog', 'alert', function () {
         });
         dialog.append(btnOk);
         dialog.setTitle(title || '提示');
+        btnOk.setText(btnText || '确定');
 
         dialog._promise = promise;
         dialog._resolved = false;
