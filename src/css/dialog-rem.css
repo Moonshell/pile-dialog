@@ -22,147 +22,218 @@ body {
   font-size: 14px; }
 
 /*! Pile Dialog Styles */
-.pile-dialog-wrap.default .dialog-box {
-  border-radius: 0.2rem;
-  background-color: #FFFFFF;
-  box-shadow: 0 0 0.375rem rgba(0, 0, 0, 0.3);
-  margin: 0rem 0.4rem;
-  min-width: 40%; }
-  .pile-dialog-wrap.default .dialog-box .dialog-title {
-    height: 2.75rem;
-    line-height: 2.75rem;
-    margin: 0;
-    padding-left: 1.05rem;
-    padding-right: 1.05rem;
-    border-radius: 0.2rem 0.2rem 0rem 0rem;
-    border-bottom: 1px solid #DADADA;
+.pile-dialog-wrap {
+  -webkit-tap-highlight-color: transparent; }
+  .pile-dialog-wrap.default .dialog-box {
+    border-radius: 0.2rem;
     background-color: #FFFFFF;
-    color: #333333;
-    font-size: 0.75rem; }
-  .pile-dialog-wrap.default .dialog-box .dialog-close-btn {
-    width: 1.4rem;
-    height: 1.4rem;
-    padding: 0.625rem 0.675rem 0.725rem 0.675rem; }
-    .pile-dialog-wrap.default .dialog-box .dialog-close-btn::after {
-      content: "";
-      display: block;
-      width: 1.4rem;
-      height: 1.4rem;
-      background: transparent url("#include(../images/dialog-close-btn.png)") no-repeat scroll 0 0;
-      background-size: 1.4rem 1.4rem; }
-  .pile-dialog-wrap.default .dialog-box .dialog-content {
-    padding-bottom: 1.25rem;
-    border-radius: 0.2rem 0.2rem 0rem 0rem;
-    background-color: #FFFFFF;
-    color: #333333;
-    font-size: 0.7rem; }
-    .pile-dialog-wrap.default .dialog-box .dialog-content .weak {
-      color: #868686; }
-    .pile-dialog-wrap.default .dialog-box .dialog-content .small {
-      font-size: 0.6rem; }
-    .pile-dialog-wrap.default .dialog-box .dialog-content .del {
-      text-decoration: line-through; }
-    .pile-dialog-wrap.default .dialog-box .dialog-content .em {
-      font-style: normal;
-      text-shadow: 0 0 4px #FCF988; }
-    .pile-dialog-wrap.default .dialog-box .dialog-content .link {
-      display: inline-block;
-      padding: 0.1rem 0rem;
-      color: #E65D52;
-      border-bottom: 1px solid #E65D52; }
-  .pile-dialog-wrap.default .dialog-box .dialog-para {
-    margin: 1.25rem 1.05rem 0rem 1.05rem;
-    padding: 0; }
-  .pile-dialog-wrap.default .dialog-box .dialog-btn {
-    margin: 1.25rem 1.05rem 0rem 1.05rem;
-    padding: 0rem 0.5rem;
-    height: 2rem;
-    line-height: 2rem;
-    border-radius: 0.15rem;
-    border: 2px solid #767676;
-    background-color: #FDF986;
-    color: #545253;
-    font-size: 0.75rem;
-    text-align: center; }
-    .pile-dialog-wrap.default .dialog-box .dialog-btn:active {
-      background-color: #827e02; }
-    .pile-dialog-wrap.default .dialog-box .dialog-btn[disabled] {
-      background-color: #C5C5C5; }
-
-.pile-dialog-wrap.flat {
-  top: auto;
-  bottom: 0;
-  align-items: flex-end; }
-  .pile-dialog-wrap.flat .dialog-box {
-    background-color: #FFFFFF;
-    width: 100%; }
-    .pile-dialog-wrap.flat .dialog-box .dialog-title {
-      height: 2.5rem;
-      line-height: 2.5rem;
+    box-shadow: 0 0 0.375rem rgba(0, 0, 0, 0.3);
+    margin: 0rem 0.4rem;
+    min-width: 40%; }
+    .pile-dialog-wrap.default .dialog-box .dialog-title {
+      height: 2.75rem;
+      line-height: 2.75rem;
+      margin: 0;
+      padding-left: 1.05rem;
+      padding-right: 1.05rem;
+      border-radius: 0.2rem 0.2rem 0rem 0rem;
+      border-bottom: 1px solid #DADADA;
+      background-color: #FFFFFF;
       color: #333333;
-      text-align: center;
-      font-size: 0.8rem; }
-    .pile-dialog-wrap.flat .dialog-box .dialog-close-btn {
-      display: none; }
-    .pile-dialog-wrap.flat .dialog-box .dialog-content {
-      color: #535252;
+      font-size: 0.75rem; }
+    .pile-dialog-wrap.default .dialog-box .dialog-close-btn {
+      width: 1.9rem;
+      height: 1.9rem;
+      padding: 0.375rem 0.425rem 0.475rem 0.425rem; }
+      .pile-dialog-wrap.default .dialog-box .dialog-close-btn::after {
+        content: "";
+        display: block;
+        width: 1.9rem;
+        height: 1.9rem;
+        border-radius: 0.1rem;
+        background: transparent url("#include(../images/dialog-close-btn.png)") no-repeat scroll center center;
+        background-size: 1.4rem 1.4rem; }
+      .pile-dialog-wrap.default .dialog-box .dialog-close-btn:active::after {
+        background-color: #DCDCD6; }
+    .pile-dialog-wrap.default .dialog-box .dialog-content {
+      padding-bottom: 1.25rem;
+      border-radius: 0.2rem 0.2rem 0rem 0rem;
+      background-color: #FFFFFF;
+      color: #333333;
       font-size: 0.7rem; }
-      .pile-dialog-wrap.flat .dialog-box .dialog-content .weak {
-        color: #969696; }
-      .pile-dialog-wrap.flat .dialog-box .dialog-content .small {
+      .pile-dialog-wrap.default .dialog-box .dialog-content .weak {
+        color: #868686; }
+      .pile-dialog-wrap.default .dialog-box .dialog-content .small {
         font-size: 0.6rem; }
-      .pile-dialog-wrap.flat .dialog-box .dialog-content .del {
+      .pile-dialog-wrap.default .dialog-box .dialog-content .del {
         text-decoration: line-through; }
-      .pile-dialog-wrap.flat .dialog-box .dialog-content .em {
+      .pile-dialog-wrap.default .dialog-box .dialog-content .em {
         font-style: normal;
-        text-shadow: 0 0 4px #E86A3E; }
-    .pile-dialog-wrap.flat .dialog-box .dialog-para {
-      margin: 1.25rem 1.75rem 0rem 1.75rem;
+        text-shadow: 0 0 4px #FCF988; }
+      .pile-dialog-wrap.default .dialog-box .dialog-content .link {
+        display: inline-block;
+        padding: 0.1rem 0rem;
+        color: #E65D52;
+        border-bottom: 1px solid #E65D52; }
+    .pile-dialog-wrap.default .dialog-box .dialog-para {
+      margin: 1.25rem 1.05rem 0rem 1.05rem;
       padding: 0; }
-    .pile-dialog-wrap.flat .dialog-box .dialog-btn {
-      margin: 1.25rem 0rem 0rem 0rem;
-      padding: 0;
-      height: 3rem;
-      line-height: 3rem;
-      border-top: 1px solid #C5C5C5;
-      background-color: #F5F5EE;
-      color: #535252;
-      font-size: 0.8rem;
+    .pile-dialog-wrap.default .dialog-box .dialog-btn {
+      margin: 1.25rem 1.05rem 0rem 1.05rem;
+      padding: 0rem 0.5rem;
+      height: 2rem;
+      line-height: 2rem;
+      border-radius: 0.15rem;
+      border: 2px solid #767676;
+      background-color: #FDF986;
+      color: #545253;
+      font-size: 0.75rem;
       text-align: center; }
-
-.pile-dialog-wrap.toast {
-  top: auto;
-  bottom: 3.75rem;
-  height: auto; }
-  .pile-dialog-wrap.toast .dialog-box {
-    display: inline-block;
-    background-color: rgba(40, 40, 40, 0.95);
-    border-radius: 2.5rem;
-    margin: 0 auto; }
-    .pile-dialog-wrap.toast .dialog-box .dialog-title {
-      height: 2.5rem;
-      line-height: 2.5rem;
+      .pile-dialog-wrap.default .dialog-box .dialog-btn:active, .pile-dialog-wrap.default .dialog-box .dialog-btn.active {
+        background-color: #827e02; }
+      .pile-dialog-wrap.default .dialog-box .dialog-btn[disabled], .pile-dialog-wrap.default .dialog-box .dialog-btn.disabled {
+        background-color: #C5C5C5; }
+  .pile-dialog-wrap.light-salmon .dialog-box {
+    border-radius: 0.2rem;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 0.375rem rgba(0, 0, 0, 0.3);
+    margin: 0rem 0.4rem;
+    min-width: 40%; }
+    .pile-dialog-wrap.light-salmon .dialog-box .dialog-title {
+      height: 2.75rem;
+      line-height: 2.75rem;
+      margin: 0;
+      padding-left: 1.05rem;
+      padding-right: 1.05rem;
+      border-radius: 0.2rem 0.2rem 0rem 0rem;
+      border-bottom: 1px solid #DADADA;
+      background-color: #FFFFFF;
       color: #333333;
-      text-align: center;
-      font-size: 0.8rem; }
-    .pile-dialog-wrap.toast .dialog-box .dialog-close-btn {
-      display: none; }
-    .pile-dialog-wrap.toast .dialog-box .dialog-content {
-      color: #C5C5C5;
-      font-size: 0.65rem; }
-      .pile-dialog-wrap.toast .dialog-box .dialog-content .weak {
-        color: #969696; }
-      .pile-dialog-wrap.toast .dialog-box .dialog-content .small {
+      font-size: 0.75rem; }
+    .pile-dialog-wrap.light-salmon .dialog-box .dialog-close-btn {
+      width: 1.9rem;
+      height: 1.9rem;
+      padding: 0.375rem 0.425rem 0.475rem 0.425rem; }
+      .pile-dialog-wrap.light-salmon .dialog-box .dialog-close-btn::after {
+        content: "";
+        display: block;
+        width: 1.9rem;
+        height: 1.9rem;
+        border-radius: 0.1rem;
+        background: transparent url("#include(../images/dialog-close-btn-light-salmon.png)") no-repeat scroll center center;
+        background-size: 1.4rem 1.4rem; }
+      .pile-dialog-wrap.light-salmon .dialog-box .dialog-close-btn:active::after {
+        background-color: #DCDCD6; }
+    .pile-dialog-wrap.light-salmon .dialog-box .dialog-content {
+      padding-bottom: 1.25rem;
+      border-radius: 0.2rem 0.2rem 0rem 0rem;
+      background-color: #FFFFFF;
+      color: #333333;
+      font-size: 0.7rem; }
+      .pile-dialog-wrap.light-salmon .dialog-box .dialog-content .weak {
+        color: #868686; }
+      .pile-dialog-wrap.light-salmon .dialog-box .dialog-content .small {
         font-size: 0.6rem; }
-      .pile-dialog-wrap.toast .dialog-box .dialog-content .del {
+      .pile-dialog-wrap.light-salmon .dialog-box .dialog-content .del {
         text-decoration: line-through; }
-      .pile-dialog-wrap.toast .dialog-box .dialog-content .em {
+      .pile-dialog-wrap.light-salmon .dialog-box .dialog-content .em {
         font-style: normal;
-        text-shadow: 0 0 4px #E86A3E; }
-    .pile-dialog-wrap.toast .dialog-box .dialog-para {
-      height: 2.5rem;
-      line-height: 2.5rem;
-      padding: 0rem 1.75rem; }
+        text-shadow: 0 0 4px #ff7737; }
+      .pile-dialog-wrap.light-salmon .dialog-box .dialog-content .link {
+        display: inline-block;
+        padding: 0.1rem 0rem;
+        color: #E65D52;
+        border-bottom: 1px solid #E65D52; }
+    .pile-dialog-wrap.light-salmon .dialog-box .dialog-para {
+      margin: 1.25rem 1.05rem 0rem 1.05rem;
+      padding: 0; }
+    .pile-dialog-wrap.light-salmon .dialog-box .dialog-btn {
+      margin: 1.25rem 1.05rem 0rem 1.05rem;
+      padding: 0rem 0.5rem;
+      height: 2.15rem;
+      line-height: 2.15rem;
+      border-radius: 0.15rem;
+      background-color: #ff9a6a;
+      color: #fff;
+      font-size: 0.75rem;
+      text-align: center; }
+      .pile-dialog-wrap.light-salmon .dialog-box .dialog-btn:active, .pile-dialog-wrap.light-salmon .dialog-box .dialog-btn.active {
+        background-color: #ff7737; }
+      .pile-dialog-wrap.light-salmon .dialog-box .dialog-btn[disabled], .pile-dialog-wrap.light-salmon .dialog-box .dialog-btn.disabled {
+        background-color: #C5C5C5; }
+  .pile-dialog-wrap.flat {
+    top: auto;
+    bottom: 0;
+    align-items: flex-end; }
+    .pile-dialog-wrap.flat .dialog-box {
+      background-color: #FFFFFF;
+      width: 100%; }
+      .pile-dialog-wrap.flat .dialog-box .dialog-title {
+        height: 2.5rem;
+        line-height: 2.5rem;
+        color: #333333;
+        text-align: center;
+        font-size: 0.8rem; }
+      .pile-dialog-wrap.flat .dialog-box .dialog-close-btn {
+        display: none; }
+      .pile-dialog-wrap.flat .dialog-box .dialog-content {
+        color: #535252;
+        font-size: 0.7rem; }
+        .pile-dialog-wrap.flat .dialog-box .dialog-content .weak {
+          color: #969696; }
+        .pile-dialog-wrap.flat .dialog-box .dialog-content .small {
+          font-size: 0.6rem; }
+        .pile-dialog-wrap.flat .dialog-box .dialog-content .del {
+          text-decoration: line-through; }
+        .pile-dialog-wrap.flat .dialog-box .dialog-content .em {
+          font-style: normal;
+          text-shadow: 0 0 4px #E86A3E; }
+      .pile-dialog-wrap.flat .dialog-box .dialog-para {
+        margin: 1.25rem 1.75rem 0rem 1.75rem;
+        padding: 0; }
+      .pile-dialog-wrap.flat .dialog-box .dialog-btn {
+        margin: 1.25rem 0rem 0rem 0rem;
+        padding: 0;
+        height: 3rem;
+        line-height: 3rem;
+        border-top: 1px solid #C5C5C5;
+        background-color: #F5F5EE;
+        color: #535252;
+        font-size: 0.8rem;
+        text-align: center; }
+  .pile-dialog-wrap.toast {
+    top: auto;
+    bottom: 3.75rem;
+    height: auto; }
+    .pile-dialog-wrap.toast .dialog-box {
+      display: inline-block;
+      background-color: rgba(40, 40, 40, 0.95);
+      border-radius: 2.5rem;
+      margin: 0 auto; }
+      .pile-dialog-wrap.toast .dialog-box .dialog-title {
+        height: 2.5rem;
+        line-height: 2.5rem;
+        color: #333333;
+        text-align: center;
+        font-size: 0.8rem; }
+      .pile-dialog-wrap.toast .dialog-box .dialog-close-btn {
+        display: none; }
+      .pile-dialog-wrap.toast .dialog-box .dialog-content {
+        color: #C5C5C5;
+        font-size: 0.65rem; }
+        .pile-dialog-wrap.toast .dialog-box .dialog-content .weak {
+          color: #969696; }
+        .pile-dialog-wrap.toast .dialog-box .dialog-content .small {
+          font-size: 0.6rem; }
+        .pile-dialog-wrap.toast .dialog-box .dialog-content .del {
+          text-decoration: line-through; }
+        .pile-dialog-wrap.toast .dialog-box .dialog-content .em {
+          font-style: normal;
+          text-shadow: 0 0 4px #E86A3E; }
+      .pile-dialog-wrap.toast .dialog-box .dialog-para {
+        height: 2.5rem;
+        line-height: 2.5rem;
+        padding: 0rem 1.75rem; }
 
 .pile-dialog-wrap {
   display: none;
