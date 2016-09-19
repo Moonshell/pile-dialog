@@ -15,11 +15,11 @@ function Dialog(opt) {
     }
 
     var prop = opt.prop || {
-                skin: 'default',
-                cover: true,
-                closeBtn: true,
-                lock: false
-            },
+            skin: 'default',
+            cover: true,
+            closeBtn: true,
+            lock: false
+        },
         title = opt.title || '',
         content = opt.content || '',
         onOpen = opt['onOpen'],
@@ -99,7 +99,13 @@ dialogTypes.register('DIALOG', Dialog, [{
         prop[name] = value;
         switch (name) {
             case 'skin':
-                self.doms.wrap.className = WRAP_CLASS_NAME + ' ' + value;
+                var oldSkin = self._skin;
+                if (oldSkin) {
+                    self.doms.wrap.classList.remove(oldSkin);
+                }
+                self.doms.wrap.classList.add(value);
+                self._skin = value;
+                //self.doms.wrap.className = WRAP_CLASS_NAME + ' ' + value;
                 break;
             case 'cover':
                 self.doms.cover.style.display = value ? 'block' : 'none';
