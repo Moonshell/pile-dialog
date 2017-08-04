@@ -1,6 +1,6 @@
 {
   "name": "pile-dialog",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "watchToRebuilding": false,
   "fcOpt": {
     "scOpt": {
@@ -11,9 +11,7 @@
     "pcOpt": {
       "browsers": "Android > 2.3, iOS > 6.0, ie_mob >=  10"
     },
-    "alOpt": {
-      "allot": false
-    },
+    "alOpt": {},
     "upOpt": {
       "delta": true,
       "form": "function uploadForm(fileStream, projName) {\r\n    return {\r\n        'prefix': projName,\r\n        'myfile': fileStream\r\n    };\r\n}",
@@ -25,17 +23,36 @@
       "replace_const",
       "prefix_crafter",
       "sprite_crafter",
+      "optimize_image",
       "run_csso",
       "join_include",
+      "find_bundle_entry",
       "run_browserify",
       "allot_link",
-      "optimize_image",
       "do_dist"
     ],
     "innerSrcDir": "./src",
     "innerDistDir": "./dist",
     "preprocessing": "function postprocessing(console, workDir) {\n    console.log('当前工作目录：', workDir);\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\n    // Todo: do something after build.\n}",
     "postprocessing": "function postprocessing(console, workDir) {\n    console.log('当前工作目录：', workDir);\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\n    // Todo: do something after build.\n}",
-    "keepOldCopy": false
+    "keepOldCopy": false,
+    "jsOpt": {
+      "bundleEntry": ""
+    },
+    "ruOpt": {
+      "plugins": {
+        "nodeResolve": false,
+        "commonJS": false,
+        "babel": true,
+        "vue": false,
+        "postcssModules": false,
+        "uglify": false
+      },
+      "format": "es"
+    },
+    "smOpt": {
+      "mappingUrl": "/*\n    传给 gulp-sourcemaps 插件 write 参数中的 \n        sourceMappingURL 字段\n */\nfunction mappingUrl(file) {\n    // return 'http://asset-host.example.com/' + file.relative + '.map';\n    return require('path').basename(file.path) + '.map';\n}",
+      "enable": false
+    }
   }
 }

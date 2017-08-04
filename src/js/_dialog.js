@@ -135,7 +135,7 @@ dialogTypes.register('DIALOG', Dialog, [{
         self.doms.box.style.zIndex = z + 2;
 
         self.doms.wrap.classList.add('open');
-        self.doms.wrap.offsetWidth = self.doms.wrap.offsetWidth | 0;
+        self.doms.wrap.offsetWidth | 0;
 
         self.doms.cover.classList.add('show');
         self.doms.box.classList.add('show');
@@ -149,7 +149,7 @@ dialogTypes.register('DIALOG', Dialog, [{
         self._waitingTimeout && window.clearTimeout(self._waitingTimeout);
         self._waitingTimeout = window.setTimeout(function () {
             self.doms.wrap.classList.remove('open');
-            self.doms.wrap.offsetWidth = self.doms.wrap.offsetWidth | 0;
+            self.doms.wrap.offsetWidth | 0;
 
             self._waitingTimeout = null;
         }, TRANSITION_TIME);
