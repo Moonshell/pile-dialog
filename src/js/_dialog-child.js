@@ -5,7 +5,7 @@ module.exports = DialogChild;
 
 function DialogChild(opt) {
     var self = this;
-    if (!self instanceof DialogChild) {
+    if (!(self instanceof DialogChild)) {
         return new DialogChild(opt);
     }
 

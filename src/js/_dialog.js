@@ -10,7 +10,7 @@ module.exports = Dialog;
 
 function Dialog(opt) {
     var self = this;
-    if (!self instanceof Dialog) {
+    if (!(self instanceof Dialog)) {
         return new Dialog(opt);
     }
 

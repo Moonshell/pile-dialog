@@ -5,7 +5,7 @@ module.exports = DialogPara;
 
 function DialogPara(opt) {
     var self = this;
-    if (!self instanceof DialogPara) {
+    if (!(self instanceof DialogPara)) {
         return new DialogPara(opt);
     }
 

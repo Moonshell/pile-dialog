@@ -5,7 +5,7 @@ module.exports = DialogRow;
 
 function DialogRow(opt) {
     var self = this;
-    if (!self instanceof DialogRow) {
+    if (!(self instanceof DialogRow)) {
         return new DialogRow(opt);
     }
 

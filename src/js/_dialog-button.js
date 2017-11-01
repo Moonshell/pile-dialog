@@ -5,7 +5,7 @@ module.exports = DialogButton;
 
 function DialogButton(opt) {
     var self = this;
-    if (!self instanceof DialogButton) {
+    if (!(self instanceof DialogButton)) {
         return new DialogButton(opt);
     }
 
