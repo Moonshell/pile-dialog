@@ -2,6 +2,9 @@
   "name": "pile-dialog",
   "version": "1.1.5",
   "watchToRebuilding": false,
+  "scripts": {
+    "build": "front-custos ."
+  },
   "fcOpt": {
     "scOpt": {
       "useRatio": "2",
@@ -54,5 +57,8 @@
       "mappingUrl": "/*\n    传给 gulp-sourcemaps 插件 write 参数中的 \n        sourceMappingURL 字段\n */\nfunction mappingUrl(file) {\n    // return 'http://asset-host.example.com/' + file.relative + '.map';\n    return require('path').basename(file.path) + '.map';\n}",
       "enable": false
     }
+  },
+  "dependencies": {
+    "front-custos": "^1.17.1"
   }
 }

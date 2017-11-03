@@ -934,10 +934,10 @@ initializer.lazyCreate('confirmDialog', 'confirm', function () {
 
 },{"./_dialog-button.js":1,"./_dialog-child.js":2,"./_dialog-para.js":3,"./_dialog-promise.js":4,"./_dialog-row.js":6,"./_dialog-utils.js":8,"./_dialog.js":9,"./_dom-load-state.js":10}],12:[function(require,module,exports){
 /**
- * Pile Dialog
+ * pile-dialog
  *
  * Ver 1.1.5
- * Date 2016/5/17
+ * Date 11/3/2017
  *
  * Created by krimeshu on 2016/1/13.
  */
